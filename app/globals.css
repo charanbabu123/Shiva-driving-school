@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  color: #1e293b; /* brand.ink */
+  background: #ffffff;
+  line-height: 1.7; /* generous body line-height per design system */
+}
+
+/* Anchor targets sit below the sticky header when scrolled to. */
+[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* Accessible focus ring for keyboard users on all interactive elements. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+@layer components {
+  /* Amber is reserved for primary CTAs so they always pop (design system). */
+  .btn-amber {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-brand-amber px-6 py-3 text-base font-bold text-brand-navy shadow-md transition hover:brightness-95 active:brightness-90;
+  }
+  .btn-outline {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border-2 border-white/80 px-6 py-3 text-base font-bold text-white transition hover:bg-white hover:text-brand-navy;
+  }
+  .btn-navy {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-brand-navy px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:brightness-125;
+  }
+  .btn-outline-navy {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border-2 border-brand-navy px-5 py-2.5 text-sm font-bold text-brand-navy transition hover:bg-brand-navy hover:text-white;
+  }
+  .section-heading {
+    @apply text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-navy;
+  }
+}

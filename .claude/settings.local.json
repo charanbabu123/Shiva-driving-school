@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "PowerShell(& \"C:\\\\Users\\\\chara\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Shiva-DrivingSchool\\\\502d2467-57a8-4e20-b4aa-38f24450d39c\\\\scratchpad\\\\gen-images.ps1\")"
+    ]
+  }
+}
