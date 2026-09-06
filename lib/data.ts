@@ -1,184 +1,328 @@
 /**
- * Single source of truth for all business content.
+ * Single source of truth for every piece of business content on the site.
  *
  * Everything visible on the page — and every piece of structured data
- * (JSON-LD) — is derived from the objects in this file. In particular the
- * `faqs` array below is rendered BOTH in the visible FAQ accordion and in the
- * FAQPage JSON-LD, so the two can never drift apart.
+ * (JSON-LD) — is derived from this file. In particular `faqs` is rendered BOTH
+ * in the visible FAQ accordion and in the FAQPage JSON-LD, so the two can
+ * never drift apart.
+ *
+ * This site represents ONE business: Shiva New-Tech Driving School, Varthur.
  */
+
+// Production URL. Set NEXT_PUBLIC_SITE_URL in Netlify (Site settings →
+// Environment variables) once the final domain / Netlify subdomain is known —
+// it drives the canonical tag, the sitemap, robots.txt and the og:image URL.
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://shivanewtechdrivingschool.netlify.app";
 
 export const business = {
   name: "Shiva New-Tech Driving School",
-  tagline: "Bengaluru's Most Trusted Driving School & RTO Service Centre",
+  legalName: "Shiva New-Tech Driving School",
+  // Painted on the back of our own training car — a real tagline, not a slogan.
+  tagline: "Learn, Pass, Drive",
+  shortDesc:
+    "Certified car and two-wheeler driving training in Varthur, Bengaluru, with complete RTO licence assistance.",
+
+  // PRIMARY CALL-TO-ACTION NUMBER — used by every Call button on the site.
   phoneDisplay: "+91 96327 81536",
   phoneRaw: "+919632781536",
   phoneTel: "tel:+919632781536",
+  sms: "sms:+919632781536",
   whatsapp: "https://wa.me/919632781536",
   whatsappDisplay: "wa.me/919632781536",
-  hoursShort: "Mon–Sun · 6:00 AM – 9:00 PM",
-  owner: {
-    name: "Shiva",
-    credibility: "12+ Years · Certified Driving Instructor · RTO Specialist",
-    image: "/images/owner/owner.jpg",
+
+  // Second line shown on our training cars. Listed once in Contact as a
+  // fallback only — it is deliberately NOT used on any CTA button, so the
+  // primary number stays the single, unambiguous action.
+  phoneAltDisplay: "+91 98444 61222",
+  phoneAltTel: "tel:+919844461222",
+
+  address: {
+    line1: "Madhuranagar, 2nd Stage",
+    line2: "Muthsandra Main Road, Varthur",
+    city: "Bengaluru",
+    state: "Karnataka",
+    postalCode: "560087",
+    country: "IN",
+    full: "Madhuranagar, 2nd Stage, Muthsandra Main Road, Varthur, Bengaluru, Karnataka 560087",
   },
-  // Best shop photo, reused for the hero background and the Open Graph image.
-  ogImage: "/images/varthur/shop-1.jpg",
+
+  // TODO(owner): open Google Maps → find the shop → "Share" → copy the exact
+  // latitude/longitude and paste them here. Precise coordinates measurably
+  // improve local-pack ranking for "driving school near me" searches.
+  geo: { latitude: "12.9375", longitude: "77.7418" },
+
+  maps: "https://share.google/1CmPmbxuch44qyzGf",
+  mapsEmbed:
+    "https://www.google.com/maps?q=" +
+    encodeURIComponent(
+      "Shiva New Tech Driving School, Muthsandra Main Road, Varthur, Bengaluru 560087"
+    ) +
+    "&output=embed",
+
+  hoursShort: "Open all 7 days · 6:00 AM – 9:00 PM",
+  hoursOpen: "06:00",
+  hoursClose: "21:00",
+
+  yearsExperience: "7+",
+  ogImage: "/images/og.jpg",
+
+  // Live rating shown on this business's own Google Business Profile
+  // (read from Google Maps, Sept 2026: 4.9 stars from 188 reviews).
+  // The count is written as "180+" deliberately, so it stays accurate as more
+  // reviews come in. TODO(owner): refresh these figures every few months.
+  //
+  // NOTE: this is displayed on the page and linked to Google, but it is NOT
+  // emitted as aggregateRating structured data. Google's rich-results policy
+  // disallows self-serving review markup for a LocalBusiness, and using it can
+  // cost you rich results entirely. Google already shows this rating itself.
+  googleRating: "4.9",
+  googleReviewCount: "180+",
+  reviewsUrl: "https://share.google/1CmPmbxuch44qyzGf",
 } as const;
 
-export type Branch = {
-  id: "varthur" | "whitefield";
+export const ALL_DAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+] as const;
+
+/** Headline trust figures. Every one is verifiable — no invented statistics. */
+export const heroStats = [
+  { value: "7+", label: "Years of Training" },
+  { value: "7", label: "Days a Week Open" },
+  { value: "3", label: "Training Cars" },
+  { value: "All", label: "RTO Services" },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/* Driving courses                                                     */
+/* ------------------------------------------------------------------ */
+
+export type Service = {
+  emoji: string;
   name: string;
-  address: string;
-  phoneDisplay: string;
-  phoneTel: string;
-  hours: string;
-  maps: string;
-  image: string;
-  isNew: boolean;
-  experience?: string;
-  badges?: string[];
+  description: string;
+  /** Pre-filled WhatsApp enquiry text for this specific course. */
+  enquiry: string;
 };
 
-export const branches: Branch[] = [
-  {
-    id: "varthur",
-    name: "Varthur Branch",
-    address:
-      "Madhuranagar, Muthsandra Main Rd, Varthur, 2nd Stage, Bengaluru, Karnataka 560087",
-    phoneDisplay: "+91 96327 81536",
-    phoneTel: "tel:+919632781536",
-    hours: "Mon–Sun · 6:00 AM – 9:00 PM",
-    // Real Google Maps place link for the Madhuranagar (Varthur) branch.
-    maps: "https://share.google/1CmPmbxuch44qyzGf",
-    image: "/images/varthur/shop-1.jpg",
-    isNew: false,
-    experience: "7+ Years at This Location",
-  },
-  {
-    id: "whitefield",
-    name: "Whitefield Branch",
-    address:
-      "Kaithota Main Rd, opp. Pranathi Nest Apartment, Whitefield, Bengaluru, Karnataka 560066",
-    phoneDisplay: "+91 96327 81536",
-    phoneTel: "tel:+919632781536",
-    hours: "Mon–Sun · 6:00 AM – 9:00 PM",
-    // Real Google Maps place link for the Whitefield (New Shiva New-Tech) branch.
-    maps: "https://share.google/qOkxIBaWgquj3Sn56",
-    image: "/images/whitefield/shop-1.jpg",
-    isNew: true,
-    badges: ["🏅 Women-Owned", "♿ Accessible", "🅿️ Free Parking"],
-  },
-];
-
-export type Service = { emoji: string; name: string; description: string };
-
-export const services: Service[] = [
-  {
-    emoji: "🛵",
-    name: "Two-Wheeler Driving Training",
-    description:
-      "Geared and gearless scooters and motorcycles, from absolute beginner to test-ready.",
-  },
+export const courses: Service[] = [
   {
     emoji: "🚗",
-    name: "Four-Wheeler (Car) Driving Training",
+    name: "Car Driving Classes for Beginners",
     description:
-      "Learn manual and automatic transmission in real Bengaluru traffic conditions.",
+      "Start from zero. Clutch, gears, steering and road sense taught step by step in a calm, patient way — manual and automatic both available.",
+    enquiry: "Hi, I want to join beginner car driving classes at Varthur.",
   },
   {
-    emoji: "📋",
-    name: "Learner's Licence (LL) Assistance",
+    emoji: "🛵",
+    name: "Two-Wheeler Training",
     description:
-      "We handle the application, paperwork, and test preparation — you just show up.",
+      "Geared bikes and gearless scooters, from your first balance lesson through to riding confidently in Bengaluru traffic.",
+    enquiry: "Hi, I want to know about two-wheeler driving training.",
   },
   {
-    emoji: "🪪",
-    name: "Permanent Driving Licence Application",
+    emoji: "🅿️",
+    name: "Reverse & Parallel Parking",
     description:
-      "Full support for new DL applications from slot booking to RTO test day.",
+      "The part everyone finds hardest, drilled until it is automatic — reverse, parallel and tight-space parking in real conditions.",
+    enquiry: "Hi, I want parking practice classes (reverse and parallel).",
+  },
+  {
+    emoji: "🛡️",
+    name: "Defensive Driving & Road Safety",
+    description:
+      "Hazard awareness, safe following distance, lane discipline and how to handle emergencies — the skills that keep you safe long after the test.",
+    enquiry: "Hi, I want to know about defensive driving lessons.",
   },
   {
     emoji: "🔄",
+    name: "Refresher Course",
+    description:
+      "Already have a licence but haven't driven in years? Rebuild your confidence behind the wheel at your own pace.",
+    enquiry: "Hi, I have a licence already and need a refresher course.",
+  },
+  {
+    emoji: "🎯",
+    name: "RTO Driving Test Preparation",
+    description:
+      "Coached specifically for the Karnataka RTO test — the figure-8 track, the gradient, the H-reverse and the on-road assessment.",
+    enquiry: "Hi, I want RTO driving test preparation classes.",
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* RTO & licence services                                              */
+/* ------------------------------------------------------------------ */
+
+export const rtoServices: Service[] = [
+  {
+    emoji: "📋",
+    name: "Learner's Licence (LL)",
+    description:
+      "Application, document checklist, online theory-test preparation and RTO slot booking — handled for you end to end.",
+    enquiry: "Hi, I need help applying for a Learner's Licence.",
+  },
+  {
+    emoji: "🪪",
+    name: "Permanent Driving Licence",
+    description:
+      "Full support for a new DL application, from slot booking right through to RTO test day.",
+    enquiry: "Hi, I want to apply for a permanent driving licence.",
+  },
+  {
+    emoji: "♻️",
     name: "Driving Licence Renewal",
     description:
-      "Expired or expiring licence? We manage the renewal process end to end.",
+      "Expired or expiring licence renewed without the queues and the repeat RTO visits.",
+    enquiry: "Hi, I need to renew my driving licence.",
   },
   {
     emoji: "📄",
     name: "Duplicate Driving Licence",
     description:
-      "Lost or damaged licence replaced with minimum hassle and paperwork.",
+      "Lost or damaged licence replaced with the minimum possible paperwork.",
+    enquiry: "Hi, I lost my driving licence and need a duplicate.",
   },
   {
     emoji: "🔑",
     name: "Vehicle Ownership Transfer",
     description:
-      "RC transfer handled correctly the first time — no repeated trips to RTO.",
+      "RC transfer completed correctly the first time — buying or selling, we handle both sides of the paperwork.",
+    enquiry: "Hi, I need help with vehicle ownership transfer (RC transfer).",
   },
   {
     emoji: "📑",
-    name: "Duplicate RC (Registration Certificate)",
+    name: "Duplicate RC",
     description:
-      "Lost your RC? We process the application and follow up with the RTO.",
+      "Lost your Registration Certificate? We file the application and follow it up with the RTO for you.",
+    enquiry: "Hi, I need a duplicate RC for my vehicle.",
   },
   {
     emoji: "✅",
-    name: "Vehicle Fitness Certificate (FC)",
+    name: "Fitness Certificate (FC)",
     description:
-      "Commercial vehicle FC inspections and certification assistance.",
+      "Commercial-vehicle fitness inspection and certification assistance.",
+    enquiry: "Hi, I need help with a vehicle Fitness Certificate.",
   },
   {
     emoji: "🏛️",
-    name: "Other RTO & Vehicle Documentation",
+    name: "Other RTO Documentation",
     description:
-      "Any other licensing or vehicle registration need across Karnataka — ask us.",
+      "NOC, address change, hypothecation removal and any other Karnataka RTO work — just ask.",
+    enquiry: "Hi, I have an RTO documentation question.",
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Why choose us                                                       */
+/* ------------------------------------------------------------------ */
 
 export type WhyPoint = { number: string; title: string; body: string };
 
 export const whyChooseUs: WhyPoint[] = [
   {
     number: "01",
-    title: "Certified & Experienced Instructor",
-    body: "Led by Shiva with 12+ years of professional driving instruction and RTO expertise. Lessons tailored to complete beginners and nervous returners alike.",
+    title: "Taught by an Instructor with 7+ Years' Experience",
+    body: "Every lesson is taken by an experienced instructor with a deep working knowledge of road rules, defensive driving technique and vehicle control — not a rotating pool of trainees. Lessons are paced to suit you, whether you have never touched a steering wheel or are returning after years away.",
   },
   {
     number: "02",
-    title: "Full RTO Assistance Included",
-    body: "We handle your learner's licence, permanent licence, renewals, ownership transfers, and all vehicle documentation — everything under one roof, no repeated trips to the RTO.",
+    title: "Complete RTO Work Under One Roof",
+    body: "Learner's licence, permanent licence, renewals, duplicates, RC transfer and fitness certificates are all handled at our Varthur office. You get the training and the paperwork in one place, without making repeated trips to the RTO yourself.",
   },
   {
     number: "03",
-    title: "Two Branches, Open 7 Days",
-    body: "Both Varthur and Whitefield locations open Monday to Sunday, 6 AM to 9 PM — morning, afternoon, or evening slots to fit around your schedule.",
+    title: "Real Bengaluru Roads, Not an Empty Ground",
+    body: "You learn where you will actually drive — Varthur Main Road, Whitefield traffic, roundabouts, narrow lanes and highway stretches. That is what turns a test pass into genuine everyday confidence.",
   },
   {
     number: "04",
-    title: "Walk-In Welcome, Free Parking",
-    body: "No advance appointment needed at either branch. Free parking available. Whitefield branch is fully wheelchair accessible.",
+    title: "Open 6 AM to 9 PM, All Seven Days",
+    body: "Early-morning slots before work, evening slots after it, and weekends too — including Sundays. Pick a time that fits your schedule and keep a steady rhythm, so your skills build quickly.",
+  },
+  {
+    number: "05",
+    title: "Hatchback, Sedan and SUV to Learn In",
+    body: "Train in a Hyundai i20, a Maruti Swift Dzire or a Tata Nexon — all properly marked L-board training vehicles, kept clean and well maintained, so you are comfortable in whatever you end up driving.",
+  },
+  {
+    number: "06",
+    title: "Walk In Any Day — No Appointment Needed",
+    body: "Drop by the office on Muthsandra Main Road during working hours, or simply call and we will explain the fees, the timings and exactly which documents to bring.",
   },
 ];
 
+/* ------------------------------------------------------------------ */
+/* Training fleet — real photographs of our own vehicles               */
+/* ------------------------------------------------------------------ */
+
+export type FleetCar = {
+  src: string;
+  alt: string;
+  name: string;
+  type: string;
+  note: string;
+};
+
+export const fleet: FleetCar[] = [
+  {
+    src: "/images/car-i20-front.jpg",
+    alt: "Hyundai i20 training car with L board at Shiva New-Tech Driving School, Varthur, Bengaluru",
+    name: "Hyundai i20",
+    type: "Hatchback",
+    note: "Light steering and great visibility — the car most beginners start in.",
+  },
+  {
+    src: "/images/car-dzire.jpg",
+    alt: "Maruti Suzuki Swift Dzire driving school car on Varthur Main Road, Bengaluru",
+    name: "Maruti Swift Dzire",
+    type: "Sedan",
+    note: "The kind of car most learners take their Karnataka RTO test in.",
+  },
+  {
+    src: "/images/car-nexon.jpg",
+    alt: "Tata Nexon SUV driving lesson car from Shiva New-Tech Driving School in Bengaluru city traffic",
+    name: "Tata Nexon",
+    type: "SUV",
+    note: "For learners who want to be confident in a bigger vehicle.",
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* Areas served — genuine catchment around the Varthur branch          */
+/* ------------------------------------------------------------------ */
+
 export const areasServed: string[] = [
-  "Whitefield",
   "Varthur",
+  "Muthsandra",
+  "Gunjur",
+  "Whitefield",
+  "Panathur",
+  "Balagere",
   "Kadugodi",
   "Channasandra",
-  "Belathur",
-  "Krishnarajapuram",
-  "Harohalli",
-  "Siddapura",
   "Immadihalli",
   "Nagondanahalli",
-  "Thirumalashettyhally",
-  "Samethanahalli",
-  "Valepura",
-  "Angondahalli",
+  "Siddapura",
+  "Ramagondanahalli",
+  "Thubarahalli",
+  "Sarjapur Road",
+  "Marathahalli",
+  "Belathur",
+  "Hoodi",
   "Varthur Kodi",
-  "Palm Meadows",
-  "Bengaluru & surrounding areas",
 ];
+
+/* ------------------------------------------------------------------ */
+/* Licence guide (long-form SEO content)                               */
+/* ------------------------------------------------------------------ */
 
 export type Step = { number: string; emoji: string; title: string; body: string };
 
@@ -186,143 +330,139 @@ export const licenceSteps: Step[] = [
   {
     number: "01",
     emoji: "📝",
-    title: "Apply for Learner's Licence",
-    body: "Visit your nearest RTO or apply online at parivahan.gov.in. You'll need your Aadhaar card, a passport-size photo, and approximately ₹200–300 in fees. We assist with the complete application and form filling at no extra charge.",
+    title: "Get Your Learner's Licence (LL)",
+    body: "Apply online at parivahan.gov.in, or simply through our Varthur office. You will need your Aadhaar card as proof of identity and address, a passport-size photograph, and roughly ₹200–300 in government fees. There is a short online theory test on road signs and rules. We fill in the application, prepare you for that test and book your RTO slot at no extra charge.",
   },
   {
     number: "02",
     emoji: "🚗",
     title: "Complete Your Driving Training",
-    body: "Karnataka law requires minimum 30 hours of certified training before the licence test. Most students at Shiva New-Tech are test-ready in 4–5 weeks, training daily in real Bengaluru traffic conditions with our experienced instructor.",
+    body: "Your learner's licence is valid for six months, and Karnataka requires a minimum of 30 days between the LL and the permanent licence test. Most of our students at Varthur are genuinely test-ready in about 4–6 weeks of regular training. You practise in live Bengaluru traffic rather than only on a quiet ground — clutch control, gear changes, hill starts, reverse and parallel parking, and lane discipline.",
   },
   {
     number: "03",
     emoji: "🎯",
-    title: "Clear Your RTO Driving Test",
-    body: "The Karnataka RTO test includes a track test (figure-8, gradient, parking) and an on-road test. We coach you specifically for the Bengaluru RTO test format and can accompany you on test day for support and confidence.",
+    title: "Clear the RTO Driving Test",
+    body: "The Karnataka RTO test has two parts: an automated track test (the figure-8, the H-reverse and the gradient) and an on-road assessment with an inspector. We coach you for the exact format used at the Bengaluru RTO, run mock tests beforehand and support you on test day. Once you pass, your permanent driving licence is issued and posted to your registered address.",
   },
 ];
 
+/* ------------------------------------------------------------------ */
+/* FAQ — mirrored verbatim into FAQPage JSON-LD                        */
+/* ------------------------------------------------------------------ */
+
 export type Faq = { question: string; answer: string };
 
-/**
- * FAQ source of truth — rendered verbatim in BOTH the visible accordion
- * (components/Faq.tsx) and the FAQPage JSON-LD (app/layout.tsx). Do not
- * duplicate this content anywhere; always import from here.
- */
 export const faqs: Faq[] = [
   {
-    question: "Which is the best driving school near Varthur, Bangalore?",
+    question: "Which is the best driving school in Varthur, Bangalore?",
     answer:
-      "Shiva New-Tech Driving School on Muthsandra Main Road, Varthur, is one of the area's most established training schools, with 7+ years at this location. We offer two-wheeler and four-wheeler training, learner's licence assistance, and full RTO services, open Monday to Sunday from 6 AM to 9 PM.",
+      "Shiva New-Tech Driving School on Muthsandra Main Road, Madhuranagar 2nd Stage, Varthur, is one of the area's most established driving schools, run by an instructor with more than 7 years of professional teaching experience. We offer car and two-wheeler training plus complete RTO licence services, and we are open all seven days from 6:00 AM to 9:00 PM. Call +91 96327 81536 to check slot availability.",
   },
   {
-    question: "Which is the best driving school near Whitefield, Bengaluru?",
+    question: "How much do driving classes cost in Varthur?",
     answer:
-      "Our Whitefield branch on Kaithota Main Road, opposite Pranathi Nest Apartment, offers certified two-wheeler and car driving training, plus complete RTO documentation services. Open all seven days from 6 AM to 9 PM, no appointment needed, free parking, and fully wheelchair accessible.",
+      "Fees depend on the course you choose — car or two-wheeler, beginner or refresher, and how many sessions you need. Because packages are tailored to each learner, we quote the exact price over the phone rather than publishing a single figure. Call or WhatsApp +91 96327 81536 and we will give you a clear, all-inclusive price with no hidden charges.",
+  },
+  {
+    question: "How many days does it take to learn car driving?",
+    answer:
+      "Most complete beginners are ready for their Karnataka RTO driving test in about 4 to 6 weeks of regular training. Karnataka law also requires a minimum of 30 days between getting your learner's licence and taking the permanent licence test, so that period sets the practical minimum. Learners with some previous experience often need fewer sessions.",
+  },
+  {
+    question: "Do you help with the learner's licence application in Bangalore?",
+    answer:
+      "Yes. We handle the complete learner's licence process — the application form, the document checklist, preparation for the online theory test, and RTO slot booking. You bring your Aadhaar card and a passport-size photograph, and we take care of the rest at our Varthur office.",
+  },
+  {
+    question: "What documents do I need for a driving licence in Karnataka?",
+    answer:
+      "For a Learner's Licence you need your Aadhaar card (as identity and address proof), one passport-size photograph, and the government fee of approximately ₹200–300. For the Permanent Driving Licence you need your valid Learner's Licence, your driving training certificate, and to clear the RTO test. We guide you through every document at no additional charge.",
   },
   {
     question: "Do you offer two-wheeler driving training?",
     answer:
-      "Yes. We train students on both geared motorcycles and gearless scooters at both our Varthur and Whitefield branches. Training is tailored for complete beginners through to licence-test preparation.",
+      "Yes. We train on both geared motorcycles and gearless scooters, from your very first balance lesson through to riding confidently in Bengaluru traffic and being ready for the licence test. Two-wheeler training is available at our Varthur branch all seven days of the week.",
   },
   {
-    question:
-      "Do you help with the learner's licence (LL) application in Bangalore?",
+    question: "Do you teach automatic cars as well as manual?",
     answer:
-      "Yes. We assist with the complete LL process — application form, document checklist, test preparation for the online theory exam, and RTO slot booking. Most students get their learner's licence within a week of starting the process with us.",
+      "Yes, we teach both. If you only intend to drive an automatic we can focus your training there, but we usually recommend learning manual first — a manual licence lets you drive both, while an automatic-only licence restricts you to automatic vehicles.",
   },
   {
-    question: "Can you help with driving licence renewal and duplicate licence?",
+    question: "Can you help with driving licence renewal or a duplicate licence?",
     answer:
-      "Yes, both licence renewal and duplicate licence (for lost or damaged licences) are services we handle at both branches. We manage the application, documentation, and follow-up with the Karnataka RTO on your behalf.",
+      "Yes. Licence renewal and duplicate licence applications for lost or damaged licences are both handled at our Varthur office. We manage the application, the documentation and the follow-up with the Karnataka RTO on your behalf, so you do not need to make repeated trips yourself.",
   },
   {
     question: "Do you assist with vehicle ownership transfer and duplicate RC?",
     answer:
-      "Yes. Vehicle ownership transfer and duplicate RC (Registration Certificate) applications are part of our RTO documentation services at both branches. We handle the paperwork and RTO follow-up so you don't need multiple visits.",
+      "Yes. Vehicle ownership transfer (RC transfer), duplicate RC, fitness certificates and other RTO documentation are all part of our services. We prepare the paperwork correctly the first time and follow it up with the RTO directly.",
   },
   {
     question: "Do I need to book an appointment in advance?",
     answer:
-      "No appointment is necessary at either branch. Walk-in enquiries are welcome at both Varthur (Muthsandra Main Road) and Whitefield (Kaithota Main Road) during our working hours of 6:00 AM to 9:00 PM, seven days a week.",
+      "No appointment is required. You are welcome to walk in to our office on Muthsandra Main Road, Varthur, any day between 6:00 AM and 9:00 PM. That said, a quick call to +91 96327 81536 beforehand lets us confirm a training slot that suits your timing.",
   },
   {
     question: "What are your working hours?",
     answer:
-      "Both branches are open Monday to Sunday, 6:00 AM to 9:00 PM. No holidays, no appointment needed. Call or WhatsApp +91 96327 81536 any day before visiting if you want to confirm slot availability for training sessions.",
+      "We are open Monday to Sunday, 6:00 AM to 9:00 PM, with no weekly holiday. Early-morning and evening slots are both available, which suits students and working professionals across Varthur and Whitefield.",
   },
   {
-    question: "Is parking available?",
+    question: "Do you teach women learners?",
     answer:
-      "Yes. The Whitefield branch on Kaithota Main Road has free on-site parking plus free street parking nearby. The Varthur branch on Muthsandra Main Road also has parking available. Call ahead if you need specific parking guidance.",
+      "Yes, absolutely. We regularly train women learners of all ages and provide a patient, respectful and safe learning environment, with flexible daytime slots. Many of our students are first-time women drivers from Varthur, Whitefield and the surrounding areas.",
   },
   {
-    question: "Is your Whitefield branch wheelchair accessible?",
+    question: "Which areas around Varthur and Whitefield do you serve?",
     answer:
-      "Yes. The Whitefield branch is fully wheelchair accessible, with an accessible entrance, seating, toilet facilities, and car park. We welcome all learners regardless of mobility requirements.",
+      "We train learners from Varthur, Muthsandra, Gunjur, Whitefield, Panathur, Balagere, Kadugodi, Channasandra, Immadihalli, Nagondanahalli, Siddapura, Ramagondanahalli, Thubarahalli, Sarjapur Road, Marathahalli, Belathur, Hoodi and the surrounding parts of East Bengaluru.",
   },
   {
-    question: "How many classes do I need before the driving test?",
+    question: "What if I am nervous or have failed the driving test before?",
     answer:
-      "Most students are ready for their Karnataka RTO driving test within 4–5 weeks of regular daily training. Karnataka law requires a minimum of 30 hours of certified training. The exact number of sessions depends on your prior experience and comfort level.",
-  },
-  {
-    question: "Do you serve areas like Kadugodi, Channasandra, and Belathur?",
-    answer:
-      "Yes. We serve learners across Whitefield, Varthur, Kadugodi, Channasandra, Belathur, Krishnarajapuram, Siddapura, Immadihalli, Nagondanahalli, and all surrounding areas of East Bengaluru from both our Varthur and Whitefield branches.",
-  },
-  {
-    question: "What documents are needed for a driving licence in Karnataka?",
-    answer:
-      "For a Learner's Licence: Aadhaar card (address proof and identity), one passport-size photo, and the application fee (approximately ₹200–300). For a Permanent Licence: your Learner's Licence, completed driving training certificate, and RTO test clearance. We guide you through every document step at no additional charge.",
-  },
-  {
-    question: "Is the Whitefield branch women-owned?",
-    answer:
-      "Yes. The Whitefield branch (New Shiva New-Tech Driving School) is identified as a women-owned business. We particularly welcome women learners and offer a safe, patient training environment at both branches, with flexible timing to suit your schedule.",
+      "That is a very common starting point and nothing to be embarrassed about. Lessons are paced entirely to your comfort level, and we focus on the specific things that went wrong last time — usually parking, hill starts or the track test. Many of our students come to us precisely after an unsuccessful attempt elsewhere.",
   },
 ];
 
-export type GalleryImage = { src: string; alt: string };
+/* ------------------------------------------------------------------ */
+/* Testimonials                                                        */
+/* ------------------------------------------------------------------ */
 
-export const galleryImages: GalleryImage[] = [
-  {
-    src: "/images/gallery/gallery-v1.jpg",
-    alt: "Shiva New-Tech Driving School exterior, Varthur branch, Bengaluru",
-  },
-  {
-    src: "/images/gallery/gallery-v2.jpg",
-    alt: "Training vehicle at Shiva New-Tech Driving School Varthur",
-  },
-  {
-    src: "/images/gallery/gallery-w1.jpg",
-    alt: "New Shiva New-Tech Driving School entrance, Whitefield, Bengaluru",
-  },
-  {
-    src: "/images/gallery/gallery-w2.jpg",
-    alt: "Whitefield branch facilities at Shiva New-Tech Driving School",
-  },
-  {
-    src: "/images/varthur/shop-2.jpg",
-    alt: "Driving training session, Varthur branch",
-  },
-  {
-    src: "/images/whitefield/shop-2.jpg",
-    alt: "Whitefield driving school interior",
-  },
-];
+/**
+ * REAL REVIEWS ONLY — this array intentionally ships EMPTY.
+ *
+ * The testimonials section renders only when this array has entries, so
+ * nothing fabricated ever reaches the live site. To switch the section on,
+ * copy genuine reviews from your Google Business Profile in here:
+ *
+ *   export const testimonials: Testimonial[] = [
+ *     { name: "Priya R.", area: "Varthur", quote: "…their actual words…" },
+ *   ];
+ *
+ * Please do not invent reviews. Google penalises fabricated review content,
+ * and it is the fastest way to lose a local-pack ranking you have earned.
+ */
+export type Testimonial = { name: string; area: string; quote: string };
 
-// Navigation links for the sticky header (all in-page anchors).
+export const testimonials: Testimonial[] = [];
+
+/* ------------------------------------------------------------------ */
+/* Helpers & navigation                                                */
+/* ------------------------------------------------------------------ */
+
+/** Build a WhatsApp deep link carrying a pre-filled enquiry message. */
+export function waLink(message: string): string {
+  return `${business.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
 export const navLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Branches", href: "#branches" },
+  { label: "Courses", href: "#courses" },
+  { label: "RTO Services", href: "#rto" },
   { label: "Why Us", href: "#whyus" },
-  { label: "Areas", href: "#areas" },
+  { label: "Our Cars", href: "#fleet" },
+  { label: "Licence Guide", href: "#guide" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
-
-// Replace with the real production domain once known.
-// TODO: set NEXT_PUBLIC_SITE_URL in Vercel, or hardcode the final domain here.
-export const SITE_URL = "https://YOURDOMAIN.com";

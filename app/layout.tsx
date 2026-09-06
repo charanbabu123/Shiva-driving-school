@@ -1,195 +1,236 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import MobileBottomBar from "@/components/MobileBottomBar";
-import { faqs, SITE_URL } from "@/lib/data";
+import {
+  ALL_DAYS,
+  areasServed,
+  business,
+  courses,
+  faqs,
+  rtoServices,
+  SITE_URL,
+} from "@/lib/data";
 
-// Inter loaded and self-hosted by Next — no external font CDN calls.
+// Inter is downloaded at build time and self-hosted by Next — no external font
+// CDN request, which keeps Largest Contentful Paint fast (a ranking factor).
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 });
 
-// CANONICAL / OG BASE URL
-// TODO: replace SITE_URL in lib/data.ts (currently "https://YOURDOMAIN.com")
-// with the real production domain once known. metadataBase below resolves the
-// canonical link and the absolute og:image URL from it.
+const TITLE =
+  "Driving School in Varthur, Bangalore | Shiva New-Tech Driving School";
+const DESCRIPTION =
+  "Shiva New-Tech Driving School — car & two-wheeler driving classes in Varthur, Bengaluru. 7+ years' experience, complete RTO licence assistance, open all 7 days 6 AM–9 PM. Call +91 96327 81536.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Shiva New-Tech Driving School | Varthur & Whitefield, Bengaluru",
-  description:
-    "Learn to drive with Shiva New-Tech Driving School in Varthur and Whitefield, Bengaluru. 12+ years of certified training, complete RTO licence assistance, open 7 days. Call +91 96327 81536.",
-  alternates: {
-    // Resolves to `${SITE_URL}/` — update SITE_URL to set the real canonical.
-    canonical: "/",
+  title: {
+    default: TITLE,
+    template: "%s | Shiva New-Tech Driving School",
   },
+  description: DESCRIPTION,
+  applicationName: business.name,
+  authors: [{ name: business.name }],
+  creator: business.name,
+  publisher: business.name,
+  keywords: [
+    "driving school in Varthur",
+    "driving school near me",
+    "best driving school Varthur Bangalore",
+    "car driving classes Varthur",
+    "two wheeler driving school Varthur",
+    "driving school Whitefield Bangalore",
+    "driving classes Gunjur Muthsandra",
+    "learners licence Varthur",
+    "RTO services Varthur Bangalore",
+    "driving licence renewal Bangalore",
+    "Shiva New-Tech Driving School",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Shiva New-Tech Driving School | Varthur & Whitefield, Bengaluru",
-    description:
-      "Learn to drive with Shiva New-Tech Driving School in Varthur and Whitefield, Bengaluru. 12+ years of certified training, complete RTO licence assistance, open 7 days. Call +91 96327 81536.",
     type: "website",
+    locale: "en_IN",
+    url: "/",
+    siteName: business.name,
+    title: TITLE,
+    description: DESCRIPTION,
     images: [
       {
-        url: "/images/varthur/shop-1.jpg",
-        width: 1600,
-        height: 900,
-        alt: "Shiva New-Tech Driving School, Varthur branch, Bengaluru",
+        url: business.ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Shiva New-Tech Driving School training cars at Varthur, Bengaluru",
       },
     ],
   },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [business.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  category: "Driving School",
+  // TODO(owner): after adding the site in Google Search Console, paste the
+  // HTML-tag verification code here to verify ownership.
+  // verification: { google: "your-search-console-token" },
 };
 
-const ALL_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+export const viewport: Viewport = {
+  themeColor: "#0A2E4A",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const domain = SITE_URL; // "https://YOURDOMAIN.com" — replace before launch
+  const domain = SITE_URL;
 
-  // --- BLOCK 1: Varthur branch (LocalBusiness + EducationalOrganization) ---
-  const varthurLd = {
-    "@type": ["LocalBusiness", "EducationalOrganization"],
-    "@id": `${domain}/#varthur`,
-    name: "Shiva New-Tech Driving School",
-    image: `${domain}/images/varthur/shop-1.jpg`,
+  /* ---------------------------------------------------------------- */
+  /* JSON-LD: one business, one place, one phone number.               */
+  /* ---------------------------------------------------------------- */
+
+  // AutomotiveBusiness is a LocalBusiness subtype (so it inherits address,
+  // geo and openingHours); EducationalOrganization captures the teaching side.
+  const localBusinessLd = {
+    "@type": ["AutomotiveBusiness", "EducationalOrganization"],
+    "@id": `${domain}/#business`,
+    name: business.name,
+    legalName: business.legalName,
+    slogan: business.tagline,
+    url: `${domain}/`,
+    image: [
+      `${domain}/images/og.jpg`,
+      `${domain}/images/hero-fleet.jpg`,
+      `${domain}/images/car-i20-front.jpg`,
+      `${domain}/images/office-rto.jpg`,
+    ],
+    logo: `${domain}/icon.png`,
     description:
-      "Certified driving school in Varthur, Bengaluru offering two-wheeler and four-wheeler training, learner's licence assistance, and complete RTO documentation services. Open Monday to Sunday, 6 AM to 9 PM.",
-    telephone: "+919632781536",
+      "Shiva New-Tech Driving School is a driving school in Varthur, Bengaluru, led by an instructor with 7+ years of experience. We offer car and two-wheeler driving training for beginners and experienced drivers, defensive driving and parking practice, RTO driving-test preparation, and complete licence and vehicle documentation services. Open all seven days, 6:00 AM to 9:00 PM.",
+    telephone: business.phoneRaw,
+    email: undefined,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Madhuranagar, 2nd Stage, Muthsandra Main Road",
-      addressLocality: "Varthur",
-      addressRegion: "Karnataka",
-      postalCode: "560087",
-      addressCountry: "IN",
+      streetAddress: `${business.address.line1}, ${business.address.line2}`,
+      addressLocality: business.address.city,
+      addressRegion: business.address.state,
+      postalCode: business.address.postalCode,
+      addressCountry: business.address.country,
     },
-    // TODO: replace geo coordinates with exact values from Google Maps for this address before going live
     geo: {
       "@type": "GeoCoordinates",
-      latitude: "12.9422",
-      longitude: "77.7512",
+      latitude: business.geo.latitude,
+      longitude: business.geo.longitude,
     },
-    hasMap: "https://share.google/1CmPmbxuch44qyzGf",
+    hasMap: business.maps,
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ALL_DAYS,
-        opens: "06:00",
-        closes: "21:00",
+        dayOfWeek: [...ALL_DAYS],
+        opens: business.hoursOpen,
+        closes: business.hoursClose,
       },
     ],
-    areaServed: ["Varthur", "Whitefield", "Kadugodi", "Channasandra", "Bengaluru"],
-    priceRange: "₹",
-    sameAs: [],
+    areaServed: areasServed.map((a) => ({
+      "@type": "Place",
+      name: `${a}, Bengaluru`,
+    })),
+    priceRange: "₹₹",
+    currenciesAccepted: "INR",
+    paymentAccepted: "Cash, UPI",
+    knowsLanguage: ["en", "kn", "hi", "ta", "te"],
+    // Every course and RTO service we actually offer, so search engines can
+    // match long-tail queries such as "duplicate RC Varthur" to this page.
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Driving Courses & RTO Services",
+      itemListElement: [...courses, ...rtoServices].map((s) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: s.name,
+          description: s.description,
+          serviceType: s.name,
+          areaServed: { "@type": "City", name: "Bengaluru" },
+          provider: { "@id": `${domain}/#business` },
+        },
+      })),
+    },
+    potentialAction: {
+      "@type": "ReserveAction",
+      name: "Call to book a driving lesson",
+      target: business.phoneTel,
+    },
+    // TODO(owner): add your Google Business Profile, Justdial, Facebook and
+    // Instagram URLs here — sameAs links are a strong local-SEO trust signal.
+    sameAs: [business.maps],
   };
 
-  // --- BLOCK 2: Whitefield branch (LocalBusiness + EducationalOrganization) ---
-  const whitefieldLd = {
-    "@type": ["LocalBusiness", "EducationalOrganization"],
-    "@id": `${domain}/#whitefield`,
-    name: "New Shiva New-Tech Driving School",
-    image: `${domain}/images/whitefield/shop-1.jpg`,
-    description:
-      "Certified driving school in Whitefield, Bengaluru. Women-owned and wheelchair accessible. Two-wheeler and car driving training, complete RTO licence and vehicle documentation services. Open all 7 days, 6 AM to 9 PM. Walk-ins welcome.",
-    telephone: "+919632781536",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Kaithota Main Road, opposite Pranathi Nest Apartment",
-      addressLocality: "Whitefield",
-      addressRegion: "Karnataka",
-      postalCode: "560066",
-      addressCountry: "IN",
-    },
-    // TODO: replace with exact coordinates from Google Maps share link for this address.
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: "12.9716",
-      longitude: "77.7506",
-    },
-    hasMap: "https://share.google/qOkxIBaWgquj3Sn56",
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ALL_DAYS,
-        opens: "06:00",
-        closes: "21:00",
-      },
-    ],
-    areaServed: [
-      "Whitefield",
-      "Kadugodi",
-      "Channasandra",
-      "Immadihalli",
-      "Nagondanahalli",
-      "Bengaluru",
-    ],
-    amenityFeature: [
-      {
-        "@type": "LocationFeatureSpecification",
-        name: "Wheelchair Accessible",
-        value: true,
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        name: "Free Parking",
-        value: true,
-      },
-    ],
-    priceRange: "₹",
-    sameAs: [],
+  const websiteLd = {
+    "@type": "WebSite",
+    "@id": `${domain}/#website`,
+    url: `${domain}/`,
+    name: business.name,
+    inLanguage: "en-IN",
+    publisher: { "@id": `${domain}/#business` },
   };
 
-  // --- BLOCK 3: FAQPage, built from the SAME `faqs` array as the visible accordion ---
+  // Built from the SAME `faqs` array the visible accordion renders, so the
+  // structured data and the on-page copy can never disagree.
   const faqLd = {
     "@type": "FAQPage",
+    "@id": `${domain}/#faq`,
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
     })),
   };
 
-  // --- Breadcrumb (single homepage item) ---
   const breadcrumbLd = {
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: `${domain}/`,
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${domain}/` },
     ],
   };
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@graph": [varthurLd, whitefieldLd, faqLd, breadcrumbLd],
+    "@graph": [localBusinessLd, websiteLd, faqLd, breadcrumbLd],
   };
 
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="font-sans text-brand-ink antialiased">
+    <html lang="en-IN" className={inter.variable}>
+      <head>
+        {/* Warm up the WhatsApp origin so the CTA opens instantly on tap. */}
+        <link rel="preconnect" href="https://wa.me" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+      </head>
+      <body className="font-sans text-brand-ink antialiased">
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
         <Header />
         {children}
         <MobileBottomBar />

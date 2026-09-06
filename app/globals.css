@@ -31,21 +31,50 @@ summary:focus-visible {
   border-radius: 0.25rem;
 }
 
+/* Respect users who prefer reduced motion — disable transitions/animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer components {
+  /* Keyboard-only shortcut past the sticky header straight to the content. */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white;
+  }
+
+  /* --- Buttons ------------------------------------------------------- */
   /* Amber is reserved for primary CTAs so they always pop (design system). */
   .btn-amber {
-    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-brand-amber px-6 py-3 text-base font-bold text-brand-navy shadow-md transition hover:brightness-95 active:brightness-90;
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-brand-amber px-6 py-3 text-base font-bold text-brand-navy shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow hover:brightness-[1.04] active:translate-y-0;
   }
   .btn-outline {
-    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border-2 border-white/80 px-6 py-3 text-base font-bold text-white transition hover:bg-white hover:text-brand-navy;
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border-2 border-white/70 px-6 py-3 text-base font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-brand-navy;
   }
   .btn-navy {
-    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-brand-navy px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:brightness-125;
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-brand-navy px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover hover:brightness-125 active:translate-y-0;
   }
   .btn-outline-navy {
-    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border-2 border-brand-navy px-5 py-2.5 text-sm font-bold text-brand-navy transition hover:bg-brand-navy hover:text-white;
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border-2 border-brand-navy/70 px-5 py-2.5 text-sm font-bold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-navy hover:text-white;
+  }
+  .btn-white {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-base font-bold text-brand-navy shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover active:translate-y-0;
+  }
+
+  /* --- Headings & accents ------------------------------------------- */
+  .eyebrow {
+    @apply inline-block text-xs font-bold uppercase tracking-[0.22em] text-brand-amber;
   }
   .section-heading {
-    @apply text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-navy;
+    @apply text-2xl font-extrabold text-brand-navy sm:text-3xl md:text-4xl;
+  }
+  .text-gradient-amber {
+    @apply bg-gradient-to-r from-brand-amber-light to-brand-amber bg-clip-text text-transparent;
   }
 }

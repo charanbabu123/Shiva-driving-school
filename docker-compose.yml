@@ -1,0 +1,14 @@
+# Convenience wrapper for running the built site locally:
+#   docker compose up --build   →   http://localhost:8080
+#
+# Production hosting is Netlify (see netlify.toml); this is for local checks.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shiva-driving-school:latest
+    container_name: shiva-driving-school
+    ports:
+      - "8080:80"
+    restart: unless-stopped

@@ -20,7 +20,12 @@ export default function Faq() {
         const panelId = `faq-panel-${i}`;
         const buttonId = `faq-button-${i}`;
         return (
-          <div key={i} className="border-b border-slate-200 last:border-b-0">
+          <div
+            key={i}
+            className={`border-b border-slate-200 transition-colors last:border-b-0 ${
+              isOpen ? "bg-brand-mist/60" : "hover:bg-brand-mist/40"
+            }`}
+          >
             <h3 className="m-0">
               <button
                 id={buttonId}
@@ -28,14 +33,20 @@ export default function Faq() {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIdx(isOpen ? null : i)}
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                className={`flex w-full items-center justify-between gap-4 border-l-4 px-5 py-4 text-left transition-colors ${
+                  isOpen ? "border-brand-amber" : "border-transparent"
+                }`}
               >
                 <span className="text-base font-bold text-brand-navy md:text-lg">
                   {f.question}
                 </span>
                 <span
                   aria-hidden="true"
-                  className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-brand-mist text-2xl font-bold leading-none text-brand-amber"
+                  className={`flex h-8 w-8 flex-none items-center justify-center rounded-full text-2xl font-bold leading-none transition-all duration-300 ${
+                    isOpen
+                      ? "rotate-180 bg-brand-amber text-brand-navy"
+                      : "bg-brand-mist text-brand-amber"
+                  }`}
                 >
                   {isOpen ? "−" : "+"}
                 </span>

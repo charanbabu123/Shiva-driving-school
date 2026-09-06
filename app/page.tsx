@@ -1,518 +1,824 @@
-import { Fragment } from "react";
-import Photo from "@/components/Photo";
+import CtaBand from "@/components/CtaBand";
 import Faq from "@/components/Faq";
+import OpenNowBadge from "@/components/OpenNowBadge";
+import Pic from "@/components/Pic";
+import SectionHead from "@/components/SectionHead";
 import {
-  business,
-  branches,
-  services,
-  whyChooseUs,
   areasServed,
+  business,
+  courses,
+  fleet,
+  heroStats,
   licenceSteps,
-  galleryImages,
+  rtoServices,
+  testimonials,
+  waLink,
+  whyChooseUs,
 } from "@/lib/data";
+
+const HERO_ENQUIRY =
+  "Hi, I found you on your website. I'd like to know about driving classes at Varthur.";
 
 export default function Home() {
   return (
-    <main className="pb-20 md:pb-0">
-      {/* ============================================================= */}
-      {/* SECTION B — HERO                                              */}
-      {/* ============================================================= */}
-      <section id="top" className="relative isolate overflow-hidden bg-brand-navy">
-        {/* Darkened shop photo behind the navy. If the image is missing the
-            Photo component falls back to a solid navy panel automatically. */}
-        <Photo
-          src={business.ogImage}
-          alt="Shiva New-Tech Driving School, Varthur branch, Bengaluru"
-          emoji="🏫"
-          priority
-          sizes="100vw"
-          className="absolute inset-0 -z-10 h-full w-full"
-          imgClassName="object-cover opacity-20"
+    // Bottom padding on mobile reserves room for the fixed contact bar.
+    <main id="main" className="pb-20 md:pb-0">
+      {/* ============================================================ */}
+      {/* HERO                                                          */}
+      {/* ============================================================ */}
+      <section
+        id="top"
+        className="relative overflow-hidden bg-brand-navy text-white"
+      >
+        {/* Depth: navy gradient, an amber glow, and a fine dot texture. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-navy-700 via-brand-navy to-brand-navy-900"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-navy/85 to-brand-navy/95" />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-brand-amber/20 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-dot-grid bg-[length:24px_24px] opacity-60"
+        />
 
-        <div className="mx-auto max-w-6xl px-4 py-16 text-center md:py-24">
-          <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white ring-1 ring-white/20">
-            ⭐ Google Verified · Serving Varthur &amp; Whitefield
-          </span>
-          <h1 className="mx-auto mt-6 max-w-3xl text-3xl font-extrabold leading-tight text-white sm:text-4xl md:text-5xl">
-            Learn to Drive with Confidence in Bengaluru
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg">
-            Shiva New-Tech Driving School — two branches in Varthur and
-            Whitefield. Certified training, complete RTO assistance, and 12+
-            years of experience.
-          </p>
-
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href={business.phoneTel} className="btn-amber w-full sm:w-auto">
-              📞 Call +91 96327 81536
-            </a>
-            <a
-              href={business.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline w-full sm:w-auto"
-            >
-              💬 WhatsApp Us
-            </a>
-          </div>
-
-          {/* Stats strip */}
-          <dl className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              { value: "12+", label: "Years Experience" },
-              { value: "2", label: "Branches in Bengaluru" },
-              { value: "7", label: "Days a Week" },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl bg-white/5 px-4 py-5 ring-1 ring-white/15"
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 md:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-24">
+          {/* ---- Copy + CTAs ---- */}
+          <div className="animate-fade-up">
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={business.reviewsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-amber/15 px-3 py-1 text-xs font-bold text-brand-amber ring-1 ring-brand-amber/30 transition-colors hover:bg-brand-amber/25"
               >
-                <dt className="text-3xl font-extrabold text-brand-amber">
-                  {s.value}
-                </dt>
-                <dd className="mt-1 text-sm text-white/80">{s.label}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
+                ⭐ {business.googleRating} on Google ·{" "}
+                {business.googleReviewCount} reviews
+              </a>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white/80 ring-1 ring-white/20">
+                🏅 {business.yearsExperience} Years in Varthur
+              </span>
+              <OpenNowBadge />
+            </div>
 
-      {/* ============================================================= */}
-      {/* SECTION C — BRANCH CARDS                                      */}
-      {/* ============================================================= */}
-      <section id="branches" className="bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-heading text-center">📍 Our Two Branches</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-brand-ink">
-            The same trusted team and services at both locations across East
-            Bengaluru.
-          </p>
+            <h1 className="mt-5 text-3xl font-extrabold leading-[1.15] tracking-tight sm:text-4xl lg:text-[3.25rem]">
+              Learn to Drive with Confidence in{" "}
+              <span className="text-gradient-amber">Varthur, Bengaluru</span>
+            </h1>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {branches.map((b) => (
-              <div
-                key={b.id}
-                className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md"
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+              Car and two-wheeler training from an instructor with{" "}
+              {business.yearsExperience} years&rsquo; experience — plus complete
+              learner&rsquo;s licence and RTO paperwork handled under one roof.
+              Open every single day, 6 AM to 9 PM.
+            </p>
+
+            {/* Primary conversion point — Call is the dominant action. */}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={business.phoneTel}
+                className="btn-amber text-base sm:text-lg"
+                aria-label={`Call Shiva New-Tech Driving School on ${business.phoneDisplay}`}
               >
-                <div className="relative">
-                  <Photo
-                    src={b.image}
-                    alt={`${b.name} of Shiva New-Tech Driving School, Bengaluru`}
-                    emoji="🏢"
-                    priority
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    className="relative aspect-video w-full rounded-t-2xl"
-                  />
-                  {b.isNew && (
-                    <span className="absolute right-3 top-3 rounded-full bg-brand-amber px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-brand-navy shadow-md">
-                      New
+                📞 Call {business.phoneDisplay}
+              </a>
+              <a
+                href={waLink(HERO_ENQUIRY)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline text-base"
+              >
+                💬 WhatsApp Us
+              </a>
+            </div>
+
+            <p className="mt-4 text-sm text-white/60">
+              ✅ Walk-ins welcome — no appointment needed &nbsp;·&nbsp; ✅ Talk
+              directly to your instructor
+            </p>
+
+            {/* ---- Trust figures ---- */}
+            <dl className="mt-10 grid max-w-lg grid-cols-2 gap-4 sm:grid-cols-4">
+              {heroStats.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl bg-white/[0.07] px-3 py-4 text-center ring-1 ring-white/10"
+                >
+                  <dt className="sr-only">{s.label}</dt>
+                  <dd>
+                    <span className="block text-2xl font-extrabold text-brand-amber">
+                      {s.value}
                     </span>
-                  )}
+                    <span className="mt-1 block text-[11px] font-semibold uppercase leading-tight tracking-wide text-white/70">
+                      {s.label}
+                    </span>
+                  </dd>
                 </div>
-
-                <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
-                  <h3 className="text-xl font-bold text-brand-navy">
-                    🏢 {b.name}
-                  </h3>
-
-                  <p className="flex items-start gap-2 text-brand-ink">
-                    <span aria-hidden="true">📍</span>
-                    <span>{b.address}</span>
-                  </p>
-
-                  <p className="flex items-center gap-2 text-brand-ink">
-                    <span aria-hidden="true">📞</span>
-                    <a
-                      href={b.phoneTel}
-                      className="font-semibold text-brand-navy underline-offset-2 hover:underline"
-                    >
-                      {b.phoneDisplay}
-                    </a>
-                  </p>
-
-                  <p className="flex items-center gap-2 text-brand-ink">
-                    <span aria-hidden="true">⏰</span>
-                    <span>{b.hours}</span>
-                  </p>
-
-                  {b.experience && (
-                    <p className="flex items-center gap-2 font-semibold text-brand-navy">
-                      <span aria-hidden="true">🏆</span>
-                      <span>{b.experience}</span>
-                    </p>
-                  )}
-
-                  {b.badges && b.badges.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {b.badges.map((badge) => (
-                        <span
-                          key={badge}
-                          className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy ring-1 ring-slate-200"
-                        >
-                          {badge}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="mt-auto flex flex-col gap-2 pt-2 sm:flex-row">
-                    <a
-                      href={b.maps}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-outline-navy flex-1"
-                    >
-                      🗺 Get Directions
-                    </a>
-                    <a href={b.phoneTel} className="btn-amber flex-1">
-                      📞 Call Branch
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </dl>
           </div>
-        </div>
-      </section>
 
-      {/* ============================================================= */}
-      {/* SECTION D — SERVICES GRID                                     */}
-      {/* ============================================================= */}
-      <section id="services" className="bg-brand-mist py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-heading text-center">🛠 Our Services</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-brand-ink">
-            All services available at both Varthur and Whitefield branches
-          </p>
-
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-            {services.map((s) => (
-              <div
-                key={s.name}
-                className="flex flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <span className="text-4xl" aria-hidden="true">
-                  {s.emoji}
-                </span>
-                <h3 className="mt-3 text-base font-bold leading-snug text-brand-navy">
-                  {s.name}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-brand-ink">
-                  {s.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SECTION E — WHY CHOOSE US                                     */}
-      {/* ============================================================= */}
-      <section id="whyus" className="bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-heading text-center">Why Choose Us</h2>
-
-          <div className="mt-12 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {whyChooseUs.map((w) => (
-              <div key={w.number}>
-                <div className="text-4xl font-extrabold text-brand-amber">
-                  {w.number}
-                </div>
-                <h3 className="mt-2 text-lg font-bold text-brand-navy">
-                  {w.title}
-                </h3>
-                <p className="mt-2 leading-relaxed text-brand-ink">{w.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SECTION F — OWNER / ABOUT                                     */}
-      {/* ============================================================= */}
-      <section className="bg-brand-mist py-16 md:py-20">
-        <div className="mx-auto max-w-5xl px-4">
-          <h2 className="section-heading text-center">Meet Your Instructor</h2>
-
-          <div className="mt-10 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12">
-            <div className="flex-none">
-              <Photo
-                src={business.owner.image}
-                alt="Shiva, certified driving instructor and owner of Shiva New-Tech Driving School"
-                emoji="🧑‍🏫"
-                sizes="200px"
-                className="relative h-[200px] w-[200px] rounded-full ring-4 ring-brand-navy/20"
+          {/* ---- Hero photograph ---- */}
+          <div className="relative">
+            <div className="overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/15">
+              <Pic
+                src="/images/hero-fleet.jpg"
+                alt="Shiva New-Tech Driving School training cars parked outside the office on Muthsandra Main Road, Varthur, Bengaluru"
+                width={1600}
+                height={900}
+                priority
+                sizes="(min-width: 1024px) 46vw, 100vw"
+                className="h-full w-full object-cover"
               />
             </div>
 
-            <div className="text-center md:text-left">
-              <h3 className="text-2xl font-bold text-brand-navy">
-                {business.owner.name}
-              </h3>
-              <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-brand-amber">
-                {business.owner.credibility}
+            {/* Address chip floating over the photo. `relative` is load-bearing:
+                a static block's background paints *below* in-flow replaced
+                content, so without it the photo covers the overlapping strip. */}
+            <div className="relative z-10 mx-4 -mt-8 rounded-2xl bg-white p-4 shadow-card ring-1 ring-black/5 sm:mx-8">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-amber">
+                📍 Visit our office
               </p>
-
-              <div className="mt-4 space-y-4 leading-relaxed text-brand-ink">
-                <p>
-                  Hello, I&apos;m Shiva. For over 12 years I&apos;ve been
-                  teaching people across Karnataka how to drive — from complete
-                  first-timers who&apos;ve never sat behind a wheel, to nervous
-                  returners getting their confidence back on the road.
-                </p>
-                <p>
-                  I run both our Varthur and Whitefield branches personally, and
-                  I handle the full RTO side too — learner&apos;s licences,
-                  permanent licences, renewals, ownership transfers and all
-                  vehicle documentation — so you never have to make repeated
-                  trips to the RTO on your own.
-                </p>
-                <p>
-                  My promise is simple: patient, practical training in real
-                  Bengaluru traffic, honest guidance on every document, and
-                  support right up to — and on — your test day. Come by either
-                  branch any day of the week, or just give me a call.
-                </p>
-              </div>
-
-              <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row md:justify-start">
-                <a href={business.phoneTel} className="btn-amber">
-                  📞 Call Shiva
-                </a>
-                <a
-                  href={business.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline-navy"
-                >
-                  💬 WhatsApp
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SECTION G — AREAS WE SERVE                                    */}
-      {/* ============================================================= */}
-      <section id="areas" className="bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-5xl px-4">
-          <h2 className="section-heading text-center">🗺 Areas We Serve</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-brand-ink">
-            Serving learners across East &amp; South-East Bengaluru
-          </p>
-
-          <div className="mt-8 flex flex-wrap justify-center gap-2.5">
-            {areasServed.map((area) => (
-              <span
-                key={area}
-                className="rounded-full border border-brand-navy/25 bg-white px-4 py-2 text-sm font-medium text-brand-navy"
+              <p className="mt-1 text-sm font-semibold leading-snug text-brand-navy">
+                {business.address.line1}, {business.address.line2}
+                <br />
+                {business.address.city} {business.address.postalCode}
+              </p>
+              <a
+                href={business.maps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block text-sm font-bold text-brand-navy underline decoration-brand-amber decoration-2 underline-offset-4 hover:text-brand-amber"
               >
-                📍 {area}
-              </span>
-            ))}
-            <span className="rounded-full border border-brand-navy/25 bg-brand-navy px-4 py-2 text-sm font-semibold text-white">
-              &amp; More
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SECTION H — LICENCE GUIDE                                     */}
-      {/* ============================================================= */}
-      <section className="bg-brand-navy py-16 text-white md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl md:text-4xl">
-            How to Get a Driving Licence in Karnataka
-          </h2>
-
-          <div className="mt-12 flex flex-col items-stretch gap-6 md:flex-row">
-            {licenceSteps.map((step, i) => (
-              <Fragment key={step.number}>
-                {i > 0 && (
-                  <div
-                    aria-hidden="true"
-                    className="flex items-center justify-center text-3xl font-bold text-brand-amber"
-                  >
-                    <span className="md:hidden">↓</span>
-                    <span className="hidden md:inline">→</span>
-                  </div>
-                )}
-                <div className="flex-1 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-amber text-2xl font-extrabold text-brand-navy">
-                    {step.number}
-                  </div>
-                  <h3 className="mt-4 text-lg font-bold">
-                    {step.emoji} {step.title}
-                  </h3>
-                  <p className="mt-2 leading-relaxed text-white/80">
-                    {step.body}
-                  </p>
-                </div>
-              </Fragment>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SECTION I — TESTIMONIALS                                      */}
-      {/* ============================================================= */}
-      <section id="reviews" className="bg-brand-mist py-16 md:py-20">
-        <div className="mx-auto max-w-3xl px-4">
-          <h2 className="section-heading text-center">
-            ⭐ What Our Students Say
-          </h2>
-
-          {/*
-            TODO: Replace with 5–10 real Google review quotes + reviewer first
-            names before launch. Do NOT invent placeholder testimonials.
-            Ask Shiva to share real reviews via WhatsApp or Google Business Profile.
-          */}
-          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-md">
-            <p className="text-2xl" aria-hidden="true">
-              ⭐⭐⭐⭐⭐
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-brand-ink">
-              Student reviews coming soon. Call us to speak with a past student
-              if you&apos;d like a reference.
-            </p>
-            <div className="mt-6">
-              <a href={business.phoneTel} className="btn-amber">
-                📞 Call for a Reference
+                Get directions →
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* SECTION J — GALLERY                                           */}
-      {/* ============================================================= */}
-      <section id="gallery" className="bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-heading text-center">📸 Our School</h2>
+      {/* ============================================================ */}
+      {/* TRUST STRIP                                                   */}
+      {/* ============================================================ */}
+      <section className="border-b border-slate-100 bg-brand-mist">
+        <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 py-6 text-center md:grid-cols-4">
+          {[
+            ["🕕", "Open 6 AM – 9 PM", "All seven days"],
+            ["🚘", "Hatchback · Sedan · SUV", "Learn in any of the three"],
+            ["🏛️", "All RTO Work Handled", "Licence to RC transfer"],
+            ["🤝", "Patient with Beginners", "And nervous returners"],
+          ].map(([emoji, title, sub]) => (
+            <li key={title} className="px-2 py-2">
+              <span className="text-2xl" aria-hidden="true">
+                {emoji}
+              </span>
+              <p className="mt-1 text-sm font-bold text-brand-navy">{title}</p>
+              <p className="text-xs text-slate-500">{sub}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-            {galleryImages.map((img) => (
-              <Photo
-                key={img.src}
-                src={img.src}
-                alt={img.alt}
-                emoji="📸"
-                sizes="(min-width: 768px) 33vw, 50vw"
-                className="relative aspect-[4/3] w-full rounded-2xl shadow-md"
-              />
+      {/* ============================================================ */}
+      {/* COURSES                                                       */}
+      {/* ============================================================ */}
+      <section id="courses" className="bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Our Driving Courses"
+            title="Everything You Need to Get on the Road"
+            sub="Whether you have never sat behind a steering wheel or you simply want to shake off the rust, there is a course here built for exactly where you are."
+          />
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {courses.map((c) => (
+              <article
+                key={c.name}
+                className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-amber/40 hover:shadow-card-hover"
+              >
+                <span
+                  className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-mist text-2xl transition-colors group-hover:bg-brand-amber/15"
+                  aria-hidden="true"
+                >
+                  {c.emoji}
+                </span>
+                <h3 className="mt-4 text-lg font-bold text-brand-navy">
+                  {c.name}
+                </h3>
+                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-slate-600">
+                  {c.description}
+                </p>
+                <div className="mt-5 flex gap-2 border-t border-slate-100 pt-4">
+                  <a
+                    href={business.phoneTel}
+                    className="flex-1 rounded-full bg-brand-navy px-3 py-2 text-center text-sm font-bold text-white transition-colors hover:bg-brand-navy-700"
+                  >
+                    📞 Call
+                  </a>
+                  <a
+                    href={waLink(c.enquiry)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 rounded-full border-2 border-slate-200 px-3 py-2 text-center text-sm font-bold text-brand-navy transition-colors hover:border-brand-amber hover:bg-brand-amber/10"
+                  >
+                    💬 Enquire
+                  </a>
+                </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* SECTION K — FAQ                                               */}
-      {/* ============================================================= */}
-      <section id="faq" className="bg-brand-mist py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-heading text-center">❓ Common Questions</h2>
-          <div className="mt-10">
-            <Faq />
+      <CtaBand
+        eyebrow="Ready when you are"
+        title="Book Your First Driving Lesson Today"
+        sub="One phone call is all it takes. We will explain the fees, the timings and exactly what to bring — no obligation."
+        variant="amber"
+      />
+
+      {/* ============================================================ */}
+      {/* RTO SERVICES                                                  */}
+      {/* ============================================================ */}
+      <section id="rto" className="bg-brand-mist py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="RTO & Licence Services"
+            title="All Your RTO Paperwork, Handled for You"
+            sub="Skip the queues and the repeat visits. From your first learner's licence to an RC transfer years later, we prepare the documents and follow them up with the Karnataka RTO on your behalf."
+          />
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {rtoServices.map((s) => (
+              <a
+                key={s.name}
+                href={waLink(s.enquiry)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-amber/50 hover:shadow-card"
+              >
+                <span className="text-2xl" aria-hidden="true">
+                  {s.emoji}
+                </span>
+                <h3 className="mt-3 text-base font-bold text-brand-navy">
+                  {s.name}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
+                  {s.description}
+                </p>
+                <span className="mt-3 inline-block text-sm font-bold text-brand-amber opacity-0 transition-opacity group-hover:opacity-100">
+                  Ask about this →
+                </span>
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <a href={business.phoneTel} className="btn-amber">
+              📞 Call {business.phoneDisplay} for RTO Help
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* SECTION L — CONTACT / FOOTER                                  */}
-      {/* ============================================================= */}
-      <footer id="contact" className="bg-brand-navy text-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
-          <div className="grid gap-10 md:grid-cols-3">
-            {/* Col 1 — Contact */}
-            <div>
-              <h2 className="text-lg font-bold uppercase tracking-wide text-brand-amber">
-                Contact Us
-              </h2>
-              <p className="mt-4 flex items-center gap-2">
-                <span aria-hidden="true">📞</span>
-                <a href={business.phoneTel} className="hover:underline">
+      {/* ============================================================ */}
+      {/* WHY US                                                        */}
+      {/* ============================================================ */}
+      <section id="whyus" className="bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Why Choose Us"
+            title="A Driving School in Varthur You Can Actually Trust"
+            sub="Seven years of teaching on these exact roads — and a genuine interest in you leaving here as a safe driver, not just a licence holder."
+          />
+
+          <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            {/* Photographs of the real business. Sticky on desktop so they stay
+                in view alongside the taller list of reasons beside them. */}
+            <div className="space-y-4 lg:sticky lg:top-24">
+              <div className="overflow-hidden rounded-2xl shadow-card">
+                <Pic
+                  src="/images/office-rto.jpg"
+                  alt="Instructor at Shiva New-Tech Driving School office in Varthur processing RTO licence applications"
+                  width={1400}
+                  height={900}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="overflow-hidden rounded-2xl shadow-card">
+                <Pic
+                  src="/images/team-new-car.jpg"
+                  alt="Shiva New-Tech Driving School team with a newly delivered Hyundai i20 training car"
+                  width={1400}
+                  height={788}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <p className="text-center text-sm text-slate-500">
+                Our Varthur office and our newest training car — real photos, not
+                stock images.
+              </p>
+            </div>
+
+            <ol className="space-y-5">
+              {whyChooseUs.map((w) => (
+                <li
+                  key={w.number}
+                  className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-card"
+                >
+                  <span
+                    className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-navy text-sm font-extrabold text-brand-amber"
+                    aria-hidden="true"
+                  >
+                    {w.number}
+                  </span>
+                  <div>
+                    <h3 className="text-base font-bold text-brand-navy md:text-lg">
+                      {w.title}
+                    </h3>
+                    <p className="mt-1.5 text-[15px] leading-relaxed text-slate-600">
+                      {w.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* FLEET                                                         */}
+      {/* ============================================================ */}
+      <section id="fleet" className="bg-brand-mist py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Our Training Cars"
+            title="Learn in a Hatchback, a Sedan or an SUV"
+            sub="Three clearly marked L-board training vehicles, kept clean and well maintained — so you are comfortable in whatever you end up driving after the test."
+          />
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {fleet.map((car) => (
+              <figure
+                key={car.name}
+                className="group overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+              >
+                <div className="overflow-hidden">
+                  <Pic
+                    src={car.src}
+                    alt={car.alt}
+                    width={720}
+                    height={960}
+                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+                    className="aspect-[3/4] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <figcaption className="p-5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">
+                    {car.type}
+                  </span>
+                  <h3 className="mt-1 text-lg font-bold text-brand-navy">
+                    {car.name}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
+                    {car.note}
+                  </p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <div className="mt-10 overflow-hidden rounded-2xl shadow-card">
+            <Pic
+              src="/images/fleet-lineup.jpg"
+              alt="The full fleet of Shiva New-Tech Driving School training cars outside the Varthur office"
+              width={1400}
+              height={900}
+              sizes="100vw"
+              className="aspect-[16/7] w-full object-cover object-center"
+            />
+          </div>
+        </div>
+      </section>
+
+      <CtaBand
+        eyebrow="Speak to your instructor"
+        title="Have a Question? Just Call — We Pick Up"
+        sub="No call centre and no forms. You will be speaking to the person who will actually be teaching you."
+        variant="navy"
+      />
+
+      {/* ============================================================ */}
+      {/* LICENCE GUIDE                                                 */}
+      {/* ============================================================ */}
+      <section id="guide" className="bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Complete Guide"
+            title="How to Get a Driving Licence in Bangalore"
+            sub="The Karnataka process in three clear steps. We take care of every form and every RTO visit along the way."
+          />
+
+          <ol className="mt-12 grid gap-6 lg:grid-cols-3">
+            {licenceSteps.map((s) => (
+              <li
+                key={s.number}
+                className="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-card"
+              >
+                <span
+                  className="absolute right-5 top-4 text-4xl font-extrabold text-brand-mist"
+                  aria-hidden="true"
+                >
+                  {s.number}
+                </span>
+                <span className="text-3xl" aria-hidden="true">
+                  {s.emoji}
+                </span>
+                <h3 className="mt-3 text-lg font-bold text-brand-navy">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-slate-600">
+                  {s.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <p className="mx-auto mt-8 max-w-3xl rounded-2xl bg-brand-mist p-5 text-center text-[15px] leading-relaxed text-slate-600">
+            <strong className="text-brand-navy">
+              Not sure where you are in the process?
+            </strong>{" "}
+            Call{" "}
+            <a
+              href={business.phoneTel}
+              className="font-bold text-brand-navy underline decoration-brand-amber decoration-2 underline-offset-4"
+            >
+              {business.phoneDisplay}
+            </a>{" "}
+            and we will tell you exactly what your next step is and what to bring.
+          </p>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* AREAS SERVED                                                  */}
+      {/* ============================================================ */}
+      <section id="areas" className="bg-brand-navy py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Areas We Serve"
+            title="Training Learners Across East Bengaluru"
+            sub="Based on Muthsandra Main Road in Varthur, we teach students from all of these neighbourhoods and everywhere in between."
+            tone="light"
+          />
+
+          <ul className="mt-10 flex flex-wrap justify-center gap-2.5">
+            {areasServed.map((a) => (
+              <li
+                key={a}
+                className="rounded-full bg-white/[0.08] px-4 py-2 text-sm font-semibold text-white/90 ring-1 ring-white/15 transition-colors hover:bg-brand-amber hover:text-brand-navy"
+              >
+                📍 {a}
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-8 text-center text-white/70">
+            Not on the list?{" "}
+            <a
+              href={business.phoneTel}
+              className="font-bold text-brand-amber underline underline-offset-4"
+            >
+              Call us
+            </a>{" "}
+            — if you can reach Varthur, we can train you.
+          </p>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* REVIEWS                                                       */}
+      {/* ============================================================ */}
+      <section id="reviews" className="bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Student Reviews"
+            title="Rated 4.9 Out of 5 by Our Students"
+            sub="Our reviews live on Google, where every one of them is from a verified visitor — nothing curated, nothing written by us."
+          />
+
+          <div className="mt-10 grid items-center gap-8 md:grid-cols-2">
+            {/* Our own car, carrying the tagline the school actually uses. */}
+            <figure className="overflow-hidden rounded-3xl shadow-card">
+              <Pic
+                src="/images/car-i20-rear.jpg"
+                alt="Shiva New-Tech Driving School training car in Varthur carrying the words Learn, Pass, Drive"
+                width={720}
+                height={960}
+                sizes="(min-width: 768px) 45vw, 100vw"
+                // Square keeps both the roof board and the "learn, Pass,
+                // Drive" lettering on the boot inside the frame.
+                className="aspect-square w-full object-cover object-center"
+              />
+            </figure>
+
+            {/* Real, verifiable rating — links straight to the Google profile. */}
+            <a
+              href={business.reviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center rounded-3xl border border-slate-200 bg-brand-mist p-8 text-center shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover"
+            >
+              <span className="text-5xl font-extrabold text-brand-navy">
+                {business.googleRating}
+              </span>
+              <span className="mt-2 text-2xl tracking-widest text-brand-amber">
+                ★★★★★
+              </span>
+              <span className="mt-3 text-[15px] font-semibold text-slate-600">
+                {business.googleReviewCount} reviews on Google
+              </span>
+              <span className="mt-4 inline-block rounded-full bg-brand-navy px-5 py-2 text-sm font-bold text-white">
+                Read our Google reviews →
+              </span>
+            </a>
+          </div>
+
+          {testimonials.length > 0 && (
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              {testimonials.map((t) => (
+                <figure
+                  key={t.name}
+                  className="rounded-2xl border border-slate-200 bg-brand-mist p-6 shadow-sm"
+                >
+                  <div className="text-brand-amber" aria-label="5 out of 5">
+                    ★★★★★
+                  </div>
+                  <blockquote className="mt-3 text-[15px] leading-relaxed text-slate-700">
+                    &ldquo;{t.quote}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-4 text-sm font-bold text-brand-navy">
+                    {t.name}
+                    <span className="block font-normal text-slate-500">
+                      {t.area}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* FAQ                                                           */}
+      {/* ============================================================ */}
+      <section id="faq" className="bg-brand-mist py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Questions & Answers"
+            title="Frequently Asked Questions"
+            sub="Fees, timings, documents and how long it takes — the things people ask us on the phone every day."
+          />
+          <div className="mt-12">
+            <Faq />
+          </div>
+          <p className="mt-8 text-center text-slate-600">
+            Still have a question?{" "}
+            <a
+              href={business.phoneTel}
+              className="font-bold text-brand-navy underline decoration-brand-amber decoration-2 underline-offset-4"
+            >
+              Call {business.phoneDisplay}
+            </a>
+          </p>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* CONTACT                                                       */}
+      {/* ============================================================ */}
+      <section id="contact" className="bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHead
+            eyebrow="Get in Touch"
+            title="Visit, Call or WhatsApp Us Today"
+            sub="We are on Muthsandra Main Road in Varthur, open from 6 in the morning until 9 at night, every day of the week."
+          />
+
+          <div className="mt-12 grid gap-8 lg:grid-cols-2">
+            {/* ---- Contact details ---- */}
+            <div className="space-y-4">
+              {/* Primary call card — the single most important element here. */}
+              <a
+                href={business.phoneTel}
+                className="block rounded-2xl bg-gradient-to-br from-brand-amber-light to-brand-amber p-6 shadow-card transition-transform hover:-translate-y-1"
+              >
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-navy/70">
+                  📞 Call us now
+                </span>
+                <p className="mt-2 text-2xl font-extrabold text-brand-navy sm:text-3xl">
                   {business.phoneDisplay}
-                </a>
-              </p>
-              <p className="mt-2 flex items-center gap-2">
-                <span aria-hidden="true">💬</span>
+                </p>
+                <p className="mt-1 text-sm font-semibold text-brand-navy/80">
+                  Tap to call — we answer 6 AM to 9 PM, all seven days
+                </p>
+              </a>
+
+              <div className="grid gap-4 sm:grid-cols-2">
                 <a
-                  href={business.whatsapp}
+                  href={waLink(HERO_ENQUIRY)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:underline"
+                  className="rounded-2xl border-2 border-emerald-500/30 bg-emerald-50 p-5 transition-colors hover:border-emerald-500"
                 >
-                  {business.whatsappDisplay}
-                </a>
-              </p>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
-                <a href={business.phoneTel} className="btn-amber">
-                  📞 Call Now
+                  <span className="text-2xl" aria-hidden="true">
+                    💬
+                  </span>
+                  <p className="mt-1 font-bold text-brand-navy">WhatsApp</p>
+                  <p className="text-sm text-slate-600">
+                    {business.whatsappDisplay}
+                  </p>
                 </a>
                 <a
-                  href={business.whatsapp}
+                  href={business.maps}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-outline"
+                  className="rounded-2xl border-2 border-slate-200 bg-brand-mist p-5 transition-colors hover:border-brand-navy"
                 >
-                  💬 WhatsApp
+                  <span className="text-2xl" aria-hidden="true">
+                    🗺️
+                  </span>
+                  <p className="mt-1 font-bold text-brand-navy">Directions</p>
+                  <p className="text-sm text-slate-600">Open in Google Maps</p>
                 </a>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <dl className="space-y-4 text-[15px]">
+                  <div className="flex gap-3">
+                    <dt className="text-xl" aria-hidden="true">
+                      📍
+                    </dt>
+                    <dd>
+                      <span className="block font-bold text-brand-navy">
+                        Address
+                      </span>
+                      <address className="not-italic leading-relaxed text-slate-600">
+                        {business.address.line1}
+                        <br />
+                        {business.address.line2}
+                        <br />
+                        {business.address.city}, {business.address.state}{" "}
+                        {business.address.postalCode}
+                      </address>
+                    </dd>
+                  </div>
+                  <div className="flex gap-3">
+                    <dt className="text-xl" aria-hidden="true">
+                      🕕
+                    </dt>
+                    <dd>
+                      <span className="block font-bold text-brand-navy">
+                        Opening hours
+                      </span>
+                      <span className="text-slate-600">
+                        Monday to Sunday · 6:00 AM – 9:00 PM
+                        <br />
+                        No weekly holiday
+                      </span>
+                    </dd>
+                  </div>
+                  <div className="flex gap-3">
+                    <dt className="text-xl" aria-hidden="true">
+                      ☎️
+                    </dt>
+                    <dd>
+                      <span className="block font-bold text-brand-navy">
+                        Phone
+                      </span>
+                      <a
+                        href={business.phoneTel}
+                        className="font-semibold text-brand-navy underline decoration-brand-amber decoration-2 underline-offset-4"
+                      >
+                        {business.phoneDisplay}
+                      </a>
+                      <span className="block text-sm text-slate-500">
+                        Alternate:{" "}
+                        <a
+                          href={business.phoneAltTel}
+                          className="underline underline-offset-2"
+                        >
+                          {business.phoneAltDisplay}
+                        </a>
+                      </span>
+                    </dd>
+                  </div>
+                </dl>
               </div>
             </div>
 
-            {/* Col 2 & 3 — Branches */}
-            {branches.map((b) => (
-              <div key={b.id}>
-                <h2 className="text-lg font-bold uppercase tracking-wide text-brand-amber">
-                  {b.name}
-                </h2>
-                <p className="mt-4 flex items-start gap-2 text-white/85">
-                  <span aria-hidden="true">📍</span>
-                  <span>{b.address}</span>
-                </p>
-                <p className="mt-2 flex items-center gap-2 text-white/85">
-                  <span aria-hidden="true">⏰</span>
-                  <span>{b.hours}</span>
-                </p>
-                <p className="mt-3">
-                  <a
-                    href={b.maps}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-brand-amber hover:underline"
-                  >
-                    🗺 Get Directions
-                  </a>
-                </p>
-                {b.id === "whitefield" && (
-                  <p className="mt-3 text-sm text-white/85">
-                    🏅 Women-Owned · ♿ Accessible
-                  </p>
-                )}
-              </div>
-            ))}
+            {/* ---- Map ---- */}
+            <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-card">
+              <iframe
+                src={business.mapsEmbed}
+                title="Map showing Shiva New-Tech Driving School on Muthsandra Main Road, Varthur, Bengaluru"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-[420px] w-full border-0 lg:h-full lg:min-h-[520px]"
+              />
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Bottom strip */}
-        <div className="border-t border-white/15">
-          <div className="mx-auto max-w-6xl px-4 py-6 text-sm text-white/70">
+      {/* ============================================================ */}
+      {/* FOOTER                                                        */}
+      {/* ============================================================ */}
+      <footer className="bg-brand-navy-900 text-white/70">
+        <div className="mx-auto max-w-7xl px-4 py-12">
+          <div className="grid gap-8 md:grid-cols-3">
+            <div>
+              <p className="flex items-center gap-2 text-lg font-extrabold text-white">
+                <span aria-hidden="true">🚗</span> {business.name}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed">
+                {business.shortDesc} Open all seven days, 6:00 AM to 9:00 PM.
+              </p>
+              <p className="mt-3 text-sm font-bold text-brand-amber">
+                &ldquo;{business.tagline}&rdquo;
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wider text-white">
+                Quick links
+              </p>
+              <ul className="mt-3 space-y-2 text-sm">
+                {[
+                  ["Driving Courses", "#courses"],
+                  ["RTO & Licence Services", "#rto"],
+                  ["Why Choose Us", "#whyus"],
+                  ["Our Training Cars", "#fleet"],
+                  ["Licence Guide", "#guide"],
+                  ["FAQ", "#faq"],
+                ].map(([label, href]) => (
+                  <li key={href}>
+                    {/* py-1.5 keeps these comfortably tappable on a phone. */}
+                    <a
+                      href={href}
+                      className="inline-block py-1.5 hover:text-brand-amber"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wider text-white">
+                Contact
+              </p>
+              <address className="mt-3 space-y-2 text-sm not-italic leading-relaxed">
+                <a
+                  href={business.phoneTel}
+                  className="block font-bold text-brand-amber"
+                >
+                  📞 {business.phoneDisplay}
+                </a>
+                <a
+                  href={business.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block hover:text-brand-amber"
+                >
+                  💬 WhatsApp
+                </a>
+                <span className="block">
+                  📍 {business.address.line1},<br />
+                  {business.address.line2},<br />
+                  {business.address.city} {business.address.postalCode}
+                </span>
+                <span className="block">🕕 {business.hoursShort}</span>
+              </address>
+            </div>
+          </div>
+
+          <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs">
             <p>
-              © 2026 Shiva New-Tech Driving School · Varthur &amp; Whitefield,
-              Bengaluru · Driving School · {business.phoneDisplay}
+              © {new Date().getFullYear()} {business.name}, Varthur, Bengaluru.
+              All rights reserved.
             </p>
-            {/* Plain-text service list — kept for search-engine content, not navigation. */}
-            <p className="mt-3 leading-relaxed">
-              {services.map((s) => s.name).join(" · ")}
+            <p className="mt-1">
+              Driving school in Varthur · Car &amp; two-wheeler training · RTO
+              licence services · Serving Whitefield, Gunjur, Panathur, Sarjapur
+              Road and East Bengaluru.
             </p>
           </div>
         </div>
