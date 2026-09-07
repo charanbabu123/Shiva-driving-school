@@ -8,6 +8,16 @@
   command = "npm run build"
   publish = "out"
 
+# Netlify's HTML post-processing injects a promo comment and two <meta> tags
+# ("hosting-provider" / "netlify-deploy") into <head>. Next's App Router renders
+# <head> as part of the React tree, so those extra nodes are a hydration
+# mismatch: React threw #418 three times, then #423, and fell back to
+# re-rendering the entire page on the client. Turning post-processing off keeps
+# the served HTML byte-identical to the build output so hydration succeeds.
+# Nothing is lost — asset optimisation is already done at build time.
+[build.processing]
+  skip_processing = true
+
 [build.environment]
   NODE_VERSION = "20"
   # Set the real site URL here (or in the Netlify UI) so the canonical tag,
