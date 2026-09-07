@@ -8,13 +8,19 @@
   command = "npm run build"
   publish = "out"
 
-# Netlify's HTML post-processing injects a promo comment and two <meta> tags
-# ("hosting-provider" / "netlify-deploy") into <head>. Next's App Router renders
-# <head> as part of the React tree, so those extra nodes are a hydration
-# mismatch: React threw #418 three times, then #423, and fell back to
-# re-rendering the entire page on the client. Turning post-processing off keeps
-# the served HTML byte-identical to the build output so hydration succeeds.
-# Nothing is lost — asset optimisation is already done at build time.
+# Keep Netlify's HTML post-processing off. Its Pretty URLs feature rewrites
+# "/page.html" to "/page", which would break the Google Search Console
+# verification file at /googlee6672e337f273ab0.html — Google needs a direct 200
+# on that exact path.
+#
+# NOTE: this does NOT stop the separate promo injection Netlify adds at the
+# edge — a comment plus <meta name="hosting-provider"> and
+# <meta name="netlify-deploy"> right after <head>. That injection breaks
+# hydration (React #418 x3 then #423, reproduced locally in both directions:
+# same build, errors only when those nodes are present), because Next's App
+# Router renders <head> as part of the React tree. It has to be switched off in
+# the Netlify UI: Project configuration → Build & deploy → Post processing.
+# See README "Known issue: Netlify head injection".
 [build.processing]
   skip_processing = true
 

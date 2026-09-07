@@ -32,6 +32,37 @@ npm run build      # static site → ./out
 > Do **not** install `@netlify/plugin-nextjs`. This site is a static export;
 > the plugin would try to wrap it in serverless functions.
 
+> Do **not** re-enable Netlify's HTML post-processing. `netlify.toml` sets
+> `[build.processing] skip_processing = true` so Pretty URLs can never rewrite
+> `/googlee6672e337f273ab0.html`, which would break Search Console
+> verification.
+
+### Known issue: Netlify head injection
+
+Netlify injects three nodes into `<head>` on the served page — a promo comment
+and `<meta name="hosting-provider">` / `<meta name="netlify-deploy">`. Next's
+App Router renders `<head>` as part of the React tree, so React sees them as
+unexpected DOM during hydration: it logs error #418 three times, then #423,
+and discards the prerendered HTML to re-render the whole page on the client.
+
+Reproduced both ways against the same build — errors appear only when those
+nodes are present (`WITHOUT injection: no errors` / `WITH injection: #418 x3,
+#423`). `skip_processing` does not stop it; it is applied at the edge.
+
+**Impact is limited:** the server HTML is complete and correct, so Googlebot
+and social scrapers are unaffected — content, JSON-LD and meta tags all read
+fine, and every section still renders for users. The cost is a slower time to
+interactive, since the browser redoes work that prerendering already did.
+
+**To fix:** in Netlify, go to *Project configuration → Build & deploy →
+Post processing* and turn off the hosting-metadata / snippet injection. It
+appears to be tied to the free `*.netlify.app` subdomain, so attaching a
+custom domain may also remove it. Re-check with:
+
+```bash
+curl -s https://your-site/ | grep hosting-provider   # should print nothing
+```
+
 ### After the first deploy — set the real URL
 
 The canonical tag, `sitemap.xml`, `robots.txt` and the social-share image all
@@ -99,8 +130,11 @@ These are marked with `TODO(owner)` in the code:
 1. **Exact map coordinates** — `business.geo` in `lib/data.ts` is approximate.
    Open Google Maps, find the shop, copy the real latitude/longitude. Precise
    coordinates measurably help "driving school near me" rankings.
-2. **Google Search Console** — verify the site, then submit `sitemap.xml`.
-   Uncomment `verification.google` in `app/layout.tsx` to verify by meta tag.
+2. **Google Search Console** — the HTML verification file is already live at
+   `/googlee6672e337f273ab0.html`, so in Search Console just press **Verify**
+   on the HTML-file method. Then submit `sitemap.xml` under *Sitemaps*.
+   Keep `public/googlee6672e337f273ab0.html` in the repo — Google re-checks it
+   periodically and un-verifies the property if it disappears.
 3. **`sameAs` links** — add the Google Business Profile, Justdial, Facebook and
    Instagram URLs in `app/layout.tsx`. These are a strong local trust signal.
 4. **Add the website URL to your Google Business Profile** once it is live —
