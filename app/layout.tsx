@@ -8,6 +8,7 @@ import {
   areasServed,
   business,
   courses,
+  doorstep,
   faqs,
   rtoServices,
   SITE_URL,
@@ -23,8 +24,10 @@ const inter = Inter({
 
 const TITLE =
   "Driving School in Varthur, Bangalore | Shiva New-Tech Driving School";
+// Leads with doorstep pickup & drop: it is the strongest differentiator and
+// the thing most likely to win the click from a search result.
 const DESCRIPTION =
-  "Shiva New-Tech Driving School — car & two-wheeler driving classes in Varthur, Bengaluru. 7+ years' experience, complete RTO licence assistance, open all 7 days 6 AM–9 PM. Call +91 96327 81536.";
+  "Driving classes in Varthur, Bengaluru with doorstep pickup & drop. Car & two-wheeler training by an instructor with 7+ years' experience, full RTO licence help, open all 7 days. Call +91 96327 81536.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -40,6 +43,9 @@ export const metadata: Metadata = {
   keywords: [
     "driving school in Varthur",
     "driving school near me",
+    "driving school with pickup and drop",
+    "doorstep driving classes Bangalore",
+    "driving classes with home pickup Varthur Whitefield",
     "best driving school Varthur Bangalore",
     "car driving classes Varthur",
     "two wheeler driving school Varthur",
@@ -124,7 +130,7 @@ export default function RootLayout({
     ],
     logo: `${domain}/icon.png`,
     description:
-      "Shiva New-Tech Driving School is a driving school in Varthur, Bengaluru, led by an instructor with 7+ years of experience. We offer car and two-wheeler driving training for beginners and experienced drivers, defensive driving and parking practice, RTO driving-test preparation, and complete licence and vehicle documentation services. Open all seven days, 6:00 AM to 9:00 PM.",
+      "Shiva New-Tech Driving School is a driving school in Varthur, Bengaluru, led by an instructor with 7+ years of experience. We offer doorstep pickup and drop for every lesson, car and two-wheeler driving training for beginners and experienced drivers, defensive driving and parking practice, RTO driving-test preparation, and complete licence and vehicle documentation services. Open all seven days, 6:00 AM to 9:00 PM.",
     telephone: business.phoneRaw,
     email: undefined,
     address: {
@@ -159,20 +165,42 @@ export default function RootLayout({
     knowsLanguage: ["en", "kn", "hi", "ta", "te"],
     // Every course and RTO service we actually offer, so search engines can
     // match long-tail queries such as "duplicate RC Varthur" to this page.
+    // Called out separately from the service list so it reads as a property of
+    // the business itself, the way "free parking" or "wheelchair access" would.
+    amenityFeature: [
+      {
+        "@type": "LocationFeatureSpecification",
+        name: "Doorstep Pickup and Drop",
+        value: true,
+      },
+    ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Driving Courses & RTO Services",
-      itemListElement: [...courses, ...rtoServices].map((s) => ({
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: s.name,
-          description: s.description,
-          serviceType: s.name,
-          areaServed: { "@type": "City", name: "Bengaluru" },
-          provider: { "@id": `${domain}/#business` },
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Doorstep Pickup & Drop for Driving Lessons",
+            description: doorstep.body,
+            serviceType: "Doorstep Pickup and Drop",
+            areaServed: { "@type": "City", name: "Bengaluru" },
+            provider: { "@id": `${domain}/#business` },
+          },
         },
-      })),
+        ...[...courses, ...rtoServices].map((s) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: s.name,
+            description: s.description,
+            serviceType: s.name,
+            areaServed: { "@type": "City", name: "Bengaluru" },
+            provider: { "@id": `${domain}/#business` },
+          },
+        })),
+      ],
     },
     potentialAction: {
       "@type": "ReserveAction",

@@ -7,6 +7,7 @@ import {
   areasServed,
   business,
   courses,
+  doorstep,
   fleet,
   heroStats,
   licenceSteps,
@@ -70,9 +71,12 @@ export default function Home() {
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
               Car and two-wheeler training from an instructor with{" "}
-              {business.yearsExperience} years&rsquo; experience — plus complete
-              learner&rsquo;s licence and RTO paperwork handled under one roof.
-              Open every single day, 6 AM to 9 PM.
+              {business.yearsExperience} years&rsquo; experience.{" "}
+              <strong className="font-semibold text-white">
+                We pick you up from home and drop you back
+              </strong>
+              , and your learner&rsquo;s licence and RTO paperwork are handled
+              here too. Open every single day, 6 AM to 9 PM.
             </p>
 
             {/* Primary conversion point — Call is the dominant action. */}
@@ -95,8 +99,8 @@ export default function Home() {
             </div>
 
             <p className="mt-4 text-sm text-white/60">
-              ✅ Walk-ins welcome — no appointment needed &nbsp;·&nbsp; ✅ Talk
-              directly to your instructor
+              ✅ Doorstep pickup &amp; drop &nbsp;·&nbsp; ✅ Walk-ins welcome
+              &nbsp;·&nbsp; ✅ Talk directly to your instructor
             </p>
 
             {/* ---- Trust figures ---- */}
@@ -165,10 +169,10 @@ export default function Home() {
       <section className="border-b border-slate-100 bg-brand-mist">
         <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 py-6 text-center md:grid-cols-4">
           {[
+            ["🚙", "Doorstep Pickup & Drop", "We come to you"],
             ["🕕", "Open 6 AM – 9 PM", "All seven days"],
             ["🚘", "Hatchback · Sedan · SUV", "Learn in any of the three"],
             ["🏛️", "All RTO Work Handled", "Licence to RC transfer"],
-            ["🤝", "Patient with Beginners", "And nervous returners"],
           ].map(([emoji, title, sub]) => (
             <li key={title} className="px-2 py-2">
               <span className="text-2xl" aria-hidden="true">
@@ -179,6 +183,73 @@ export default function Home() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* ============================================================ */}
+      {/* DOORSTEP PICKUP & DROP                                        */}
+      {/* The school's biggest differentiator, so it sits high on the    */}
+      {/* page in the one colour reserved for things that must be seen.  */}
+      {/* ============================================================ */}
+      <section id="doorstep" className="bg-white pt-14 md:pt-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-amber-light to-brand-amber px-6 py-10 shadow-card md:px-12 md:py-12">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/30 blur-3xl"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-dot-grid-navy bg-[length:22px_22px] opacity-40"
+            />
+
+            <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <span className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand-amber">
+                  🚙 {doorstep.eyebrow}
+                </span>
+                <h2 className="mt-4 text-2xl font-extrabold leading-tight text-brand-navy sm:text-3xl md:text-4xl">
+                  {doorstep.title}
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-brand-navy/80">
+                  {doorstep.body}
+                </p>
+                {doorstep.priceNote && (
+                  <p className="mt-3 text-base font-bold text-brand-navy">
+                    {doorstep.priceNote}
+                  </p>
+                )}
+                <ul className="mt-5 flex flex-wrap gap-2">
+                  {doorstep.points.map((p) => (
+                    <li
+                      key={p}
+                      className="rounded-full bg-white/75 px-4 py-2 text-sm font-semibold text-brand-navy ring-1 ring-brand-navy/10"
+                    >
+                      ✓ {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-none">
+                <a
+                  href={business.phoneTel}
+                  className="btn-navy whitespace-nowrap px-6 py-3 text-base"
+                  aria-label={`Call ${business.phoneDisplay} about doorstep pickup and drop`}
+                >
+                  📞 Call {business.phoneDisplay}
+                </a>
+                <a
+                  href={waLink(doorstep.enquiry)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-white whitespace-nowrap"
+                >
+                  💬 Ask about pickup
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ============================================================ */}
@@ -325,16 +396,16 @@ export default function Home() {
             </div>
 
             <ol className="space-y-5">
-              {whyChooseUs.map((w) => (
+              {whyChooseUs.map((w, i) => (
                 <li
-                  key={w.number}
+                  key={w.title}
                   className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-card"
                 >
                   <span
                     className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-navy text-sm font-extrabold text-brand-amber"
                     aria-hidden="true"
                   >
-                    {w.number}
+                    {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
                     <h3 className="text-base font-bold text-brand-navy md:text-lg">
@@ -816,7 +887,8 @@ export default function Home() {
               All rights reserved.
             </p>
             <p className="mt-1">
-              Driving school in Varthur · Car &amp; two-wheeler training · RTO
+              Driving school in Varthur with doorstep pickup &amp; drop · Car &amp;
+              two-wheeler training · RTO
               licence services · Serving Whitefield, Gunjur, Panathur, Sarjapur
               Road and East Bengaluru.
             </p>

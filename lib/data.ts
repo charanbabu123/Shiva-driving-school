@@ -100,6 +100,30 @@ export const heroStats = [
   { value: "All", label: "RTO Services" },
 ] as const;
 
+/**
+ * Doorstep pickup & drop — the school's biggest differentiator, so it gets a
+ * highlight band of its own high on the page, plus a line in the hero, the
+ * trust strip, the reasons list, the FAQ and the structured data.
+ *
+ * NOTE(owner): the copy deliberately makes no claim about cost, because it was
+ * not specified. If pickup and drop is included in the fee, say so — "free" or
+ * "included" is a strong conversion word. Change `priceNote` below to e.g.
+ * "Included in your course fee — no extra charge." and it appears on the band.
+ */
+export const doorstep = {
+  eyebrow: "Doorstep Service",
+  title: "We Pick You Up. We Drop You Back.",
+  body: "Your driving lesson starts at your front door. We collect you from home or your office, train you on real Bengaluru roads, and drop you back when the session ends — so you never have to arrange your own travel to class.",
+  priceNote: "",
+  points: [
+    "Pickup from home or office",
+    "Dropped back after every lesson",
+    "Across Varthur, Whitefield & nearby areas",
+  ],
+  enquiry:
+    "Hi, I'd like to know about doorstep pickup and drop for driving classes.",
+} as const;
+
 /* ------------------------------------------------------------------ */
 /* Driving courses                                                     */
 /* ------------------------------------------------------------------ */
@@ -224,36 +248,36 @@ export const rtoServices: Service[] = [
 /* Why choose us                                                       */
 /* ------------------------------------------------------------------ */
 
-export type WhyPoint = { number: string; title: string; body: string };
+// The displayed "01", "02"… come from the render index, so points can be added
+// or reordered without renumbering anything by hand.
+export type WhyPoint = { title: string; body: string };
 
 export const whyChooseUs: WhyPoint[] = [
   {
-    number: "01",
     title: "Taught by an Instructor with 7+ Years' Experience",
     body: "Every lesson is taken by an experienced instructor with a deep working knowledge of road rules, defensive driving technique and vehicle control — not a rotating pool of trainees. Lessons are paced to suit you, whether you have never touched a steering wheel or are returning after years away.",
   },
   {
-    number: "02",
+    title: "Doorstep Pickup & Drop",
+    body: "We come to you. The training car collects you from your home or office at your slot time and drops you back when the lesson ends, anywhere in Varthur, Whitefield and the nearby areas — no autos to arrange, no travelling to class, and a real help if you are fitting lessons around a job.",
+  },
+  {
     title: "Complete RTO Work Under One Roof",
     body: "Learner's licence, permanent licence, renewals, duplicates, RC transfer and fitness certificates are all handled at our Varthur office. You get the training and the paperwork in one place, without making repeated trips to the RTO yourself.",
   },
   {
-    number: "03",
     title: "Real Bengaluru Roads, Not an Empty Ground",
     body: "You learn where you will actually drive — Varthur Main Road, Whitefield traffic, roundabouts, narrow lanes and highway stretches. That is what turns a test pass into genuine everyday confidence.",
   },
   {
-    number: "04",
     title: "Open 6 AM to 9 PM, All Seven Days",
     body: "Early-morning slots before work, evening slots after it, and weekends too — including Sundays. Pick a time that fits your schedule and keep a steady rhythm, so your skills build quickly.",
   },
   {
-    number: "05",
     title: "Hatchback, Sedan and SUV to Learn In",
     body: "Train in a Hyundai i20, a Maruti Swift Dzire or a Tata Nexon — all properly marked L-board training vehicles, kept clean and well maintained, so you are comfortable in whatever you end up driving.",
   },
   {
-    number: "06",
     title: "Walk In Any Day — No Appointment Needed",
     body: "Drop by the office on Muthsandra Main Road during working hours, or simply call and we will explain the fees, the timings and exactly which documents to bring.",
   },
@@ -358,6 +382,11 @@ export const faqs: Faq[] = [
     question: "Which is the best driving school in Varthur, Bangalore?",
     answer:
       "Shiva New-Tech Driving School on Muthsandra Main Road, Madhuranagar 2nd Stage, Varthur, is one of the area's most established driving schools, run by an instructor with more than 7 years of professional teaching experience. We offer car and two-wheeler training plus complete RTO licence services, and we are open all seven days from 6:00 AM to 9:00 PM. Call +91 96327 81536 to check slot availability.",
+  },
+  {
+    question: "Do you offer doorstep pickup and drop for driving classes?",
+    answer:
+      "Yes. We pick you up from your home or office at your slot time and drop you back once the lesson finishes, across Varthur, Whitefield, Gunjur, Panathur, Balagere and the surrounding areas. You do not need to travel to the office for your class — it is one of the main reasons working professionals train with us. Call +91 96327 81536 to confirm pickup at your address.",
   },
   {
     question: "How much do driving classes cost in Varthur?",
