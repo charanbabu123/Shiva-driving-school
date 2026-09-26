@@ -39,15 +39,28 @@ npm run build      # static site → ./out
 
 ### Known issue: Netlify head injection
 
-Netlify injects three nodes into `<head>` on the served page — a promo comment
-and `<meta name="hosting-provider">` / `<meta name="netlify-deploy">`. Next's
-App Router renders `<head>` as part of the React tree, so React sees them as
-unexpected DOM during hydration: it logs error #418 three times, then #423,
-and discards the prerendered HTML to re-render the whole page on the client.
+Netlify injects a promotional comment into `<head>` on the served page:
 
-Reproduced both ways against the same build — errors appear only when those
-nodes are present (`WITHOUT injection: no errors` / `WITH injection: #418 x3,
-#423`). `skip_processing` does not stop it; it is applied at the edge.
+```html
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&… -->
+```
+
+Next's App Router renders `<head>` as part of the React tree, so React sees
+that as unexpected DOM during hydration: it logs error #418 three times, then
+#423, and discards the prerendered HTML to re-render the whole page on the
+client.
+
+Reproduced both ways against the same build — errors appear only when the
+injected node is present (`WITHOUT injection: no errors` / `WITH injection:
+#418 x3, #423`). `skip_processing` does not stop it; it is applied at the edge.
+
+**The exact markup changes over time.** It first appeared as the comment plus
+`<meta name="hosting-provider">` and `<meta name="netlify-deploy">`; Netlify
+has since dropped the two meta tags and kept the comment, and moved it after
+`<meta charSet>`. Grep for the comment text, not for the meta names — checking
+for `hosting-provider` now reports a false "fixed" while the comment, which is
+on its own enough to break hydration, is still being served.
 
 **Impact is limited:** the server HTML is complete and correct, so Googlebot
 and social scrapers are unaffected — content, JSON-LD and meta tags all read
@@ -60,7 +73,8 @@ appears to be tied to the free `*.netlify.app` subdomain, so attaching a
 custom domain may also remove it. Re-check with:
 
 ```bash
-curl -s https://your-site/ | grep hosting-provider   # should print nothing
+# 0 means the injection is gone and hydration is healthy again.
+curl -s https://shivanewtechdrivingschool.netlify.app/ | grep -c "hosted on Netlify"
 ```
 
 ### After the first deploy — set the real URL
